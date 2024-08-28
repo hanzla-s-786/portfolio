@@ -907,11 +907,6 @@ img {
     margin-left: var(--mb-1);
     margin-right: var(--mb-1);
   }
-}
-  .header {
-    top: 0;
-    bottom: initial;
-  }
   .nav__menu {
     padding: 2rem 0.25rem 4rem;
   }
@@ -954,6 +949,11 @@ img {
 
   .project__img {
     width: 200px;
+  }
+}
+.header {
+    top: 0;
+    bottom: initial;
   }
 /* For medium Devices */
 @media screen and (min-width: 568px) {
