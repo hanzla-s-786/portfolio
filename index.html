@@ -17,6 +17,10 @@
             --primary-color: #00ffe1;
             --secondary-color: #b5f5ff;
             --text-color: #ccc;
+            --warn-color: #ffd900;
+            --crit-color: #ff4d4d; /* Critical Red */
+            --success-color: #00ffe1; 
+            --prompt-color: #00ff41; /* Kali green */
             --shadow-color: rgba(0, 255, 225, 0.1);
             --shadow-color-hover: rgba(0, 255, 225, 0.2);
             --spotlight-size: 400px;
@@ -30,7 +34,7 @@
         }
         html {
             scroll-behavior: smooth;
-            font-size: 100%; /* Use percentage for better accessibility */
+            font-size: 100%; 
         }
         body {
             background-color: var(--bg-color);
@@ -38,24 +42,20 @@
             font-family: 'Share Tech Mono', monospace;
             overflow-x: hidden;
             position: relative;
-            font-size: 1rem; /* Base font size (usually 16px) */
+            font-size: 1rem; 
         }
         
-        /* --- NEW: Hide content by default for fade-in effect --- */
+        /* --- Hide content by default for fade-in effect --- */
         header, main, footer {
             opacity: 0;
-            /* This is the fade-in transition */
             transition: opacity 0.8s ease-in-out;
         }
-        
-        /* This class will be added by JS to trigger the fade-in */
         .content-visible {
             opacity: 1;
         }
-        /* --- End of new CSS --- */
 
 
-        /* --- MODIFIED: Pre-loader --- */
+        /* --- Pre-loader --- */
         #preloader {
             position: fixed;
             top: 0;
@@ -63,21 +63,19 @@
             width: 100vw;
             height: 100vh;
             background: var(--bg-color);
-            /* MODIFIED: Align top-left like a console */
             display: flex;
             justify-content: flex-start;
             align-items: flex-start;
             z-index: 9999;
-            /* This is the fade-out transition */
             transition: opacity 0.5s ease;
-            padding: 2rem; /* NEW: Add padding */
+            padding: 2rem; 
         }
         .loader {
             font-family: 'Share Tech Mono', monospace;
             color: var(--primary-color);
-            font-size: 1.1rem; /* MODIFIED: Sized for console */
-            line-height: 1.6; /* NEW: Space out lines */
-            white-space: pre-wrap; /* NEW: Allow line breaks */
+            font-size: 1.1rem; 
+            line-height: 1.6; 
+            white-space: pre-wrap; 
         }
         #preloader.loaded {
             opacity: 0;
@@ -128,32 +126,30 @@
             }
         }
         
-        /* --- MODIFIED: Fixed Header & Navigation --- */
+        /* --- Fixed Header & Navigation --- */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.5rem 5%; /* MODIFIED: Padding */
+            padding: 1.5rem 5%; 
             background: var(--header-bg);
             backdrop-filter: blur(10px);
             box-shadow: 0 0 20px var(--primary-color);
-            position: fixed; /* MODIFIED: Changed from sticky to fixed */
+            position: fixed; 
             top: 0;
             width: 100%;
             z-index: 1000;
         }
         .logo {
             font-family: 'Orbitron', sans-serif;
-            /* --- FLUID TYPOGRAPHY FIX --- */
             font-size: clamp(1.3rem, 4vw, 1.8rem);
             color: var(--primary-color);
             text-decoration: none;
             animation: glow 2s ease-in-out infinite alternate;
-            position: relative; /* MODIFIED: Added for dot positioning */
-            white-space: nowrap; /* MODIFIED: Prevents wrap */
+            position: relative; 
+            white-space: nowrap; 
         }
         
-        /* NEW: Online dot for logo */
         .logo::after {
             content: '';
             position: absolute;
@@ -162,14 +158,14 @@
             background-color: var(--primary-color);
             border-radius: 50%;
             box-shadow: 0 0 10px var(--primary-color);
-            bottom: 2px; /* Position at bottom of text */
-            right: -15px; /* Position to the right of text */
+            bottom: 2px; 
+            right: -15px; 
         }
         
         .nav-links {
             display: flex;
             gap: 2rem;
-            white-space: nowrap; /* MODIFIED: Prevents wrap */
+            white-space: nowrap; 
         }
         .nav-links a {
             color: var(--primary-color);
@@ -195,7 +191,7 @@
             cursor: pointer;
             flex-direction: column;
             gap: 5px;
-            z-index: 1010; /* Ensures hamburger is on top of slide-out menu */
+            z-index: 1010; 
         }
         .hamburger .line {
             width: 25px;
@@ -216,13 +212,12 @@
         }
         #hero h1 {
             font-family: 'Orbitron', sans-serif;
-            /* --- FLUID TYPOGRAPHY FIX --- */
             font-size: clamp(1.8rem, 6vw, 2.8rem);
             color: var(--primary-color);
             margin-bottom: 0.5rem;
+            position: relative; /* For glitch effect */
         }
         #hero p {
-            /* --- FLUID TYPography FIX --- */
             font-size: clamp(1rem, 2.5vw, 1.2rem);
             color: var(--secondary-color);
         }
@@ -231,26 +226,63 @@
             border-right: 3px solid var(--primary-color);
             padding-right: 5px;
             margin-left: 5px;
-            /* MODIFIED: Blinking animation removed */
-            /* animation: blink 0.8s infinite; */
+        }
+
+        /* --- Glitch Effect --- */
+        #hero h1[data-text]::before,
+        #hero h1[data-text]::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            overflow: hidden;
+            color: var(--primary-color);
+            background: var(--bg-color);
+            z-index: 2;
+        }
+
+        #hero h1[data-text]::before {
+            left: 3px;
+            text-shadow: -2px 0 var(--crit-color);
+            animation: glitch-top 1.5s linear infinite reverse;
+        }
+
+        #hero h1[data-text]::after {
+            left: -3px;
+            text-shadow: -2px 0 var(--secondary-color);
+            animation: glitch-bottom 1s linear infinite;
+        }
+
+        @keyframes glitch-top {
+            0%, 14%, 19%, 100% { clip-path: inset(0 0 1px 0); }
+            15% { clip-path: inset(10px 0 90px 0); }
+            16% { clip-path: inset(40px 0 30px 0); }
+            17% { clip-path: inset(80px 0 5px 0); }
+            18% { clip-path: inset(30px 0 65px 0); }
+        }
+
+        @keyframes glitch-bottom {
+            0%, 14%, 19%, 100% { clip-path: inset(99px 0 0 0); }
+            15% { clip-path: inset(10px 0 80px 0); }
+            16% { clip-path: inset(50px 0 30px 0); }
+            17% { clip-path: inset(20px 0 5px 0); }
+            18% { clip-path: inset(40px 0 45px 0); }
         }
         
-        /* This keyframe is still used by the preloader, so it stays */
         @keyframes blink {
             0%, 100% {
-                border-color: transparent;
-                color: transparent;
+                opacity: 0;
             }
             50% {
-                border-color: var(--primary-color);
-                color: inherit; /* Use for the cursor span in preloader */
+                opacity: 1;
             }
         }
 
         /* --- General Section & Title Styling --- */
         main {
             width: 100%;
-            padding-top: 6rem; /* NEW: Offset for fixed header */
+            padding-top: 6rem; 
         }
         section {
             padding: 4rem 10%;
@@ -258,27 +290,43 @@
         section:not(:last-of-type) {
             border-bottom: 1px solid var(--card-border);
         }
+        
+        /* --- Animated Section Title --- */
         .section-title {
-            /* --- FLUID TYPOGRAPHY FIX --- */
             font-size: clamp(1.5rem, 5vw, 2rem);
             margin-bottom: 2rem;
-            border-left: 5px solid var(--primary-color);
-            padding-left: 1rem;
+            padding-left: 1rem; 
             color: var(--primary-color);
+            position: relative; 
+        }
+        .section-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 5px;
+            background: var(--primary-color);
+            transform: scaleY(0); 
+            transform-origin: bottom;
+            transition: transform 0.6s cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
+        .section-title.show::before {
+            transform: scaleY(1); 
         }
         
-        /* --- NEW: About Me Section Styles --- */
+        /* --- MODIFIED: About Me Section (Terminal) --- */
         .about-container {
             display: flex;
-            align-items: center;
+            align-items: stretch; 
             gap: 2.5rem;
         }
         .about-image {
-            flex-basis: 300px; /* Base size */
+            flex-basis: 300px; 
             flex-shrink: 0;
         }
         .about-image img {
-            width: 100%; /* Make image fill the container */
+            width: 100%; 
             height: auto;
             border-radius: 50%;
             border: 4px solid var(--primary-color);
@@ -289,20 +337,124 @@
             transform: scale(1.05);
             box-shadow: 0 0 40px var(--shadow-color-hover);
         }
-        .about-content {
+        
+        /* NEW: Terminal Window Styles */
+        .terminal-window {
             flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            background: #000;
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px var(--shadow-color);
+            overflow: hidden;
+            min-height: 400px; 
         }
+
+        .terminal-header {
+            padding: 0.5rem 0.75rem;
+            background: var(--card-border);
+            color: var(--secondary-color);
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+        }
+
+        .terminal-header::before {
+            /* Control buttons */
+            content: '';
+            display: block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ff5f57;
+            box-shadow: 20px 0 0 #febc2e, 40px 0 0 #28c840;
+            margin-right: 40px;
+        }
+        .terminal-header::after {
+            /* Title */
+            content: 'hanzla@kali: ~/about';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--text-color);
+        }
+
+        .terminal-body {
+            /* MODIFIED: Increased height for script */
+            height: 400px; 
+            overflow-y: scroll; /* MODIFIED: Back to scroll */
+            padding: 0.75rem;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            scroll-behavior: smooth;
+            scrollbar-width: none; 
+            -ms-overflow-style: none; 
+        }
+        .terminal-body::-webkit-scrollbar {
+            display: none; 
+        }
+
+        .terminal-line {
+            line-height: 1.5;
+            white-space: pre-wrap; /* Allows wrapping for bio */
+            word-break: break-all;
+        }
+        .terminal-line .prompt-user {
+            color: var(--prompt-color);
+        }
+        .terminal-line .prompt-host {
+            color: var(--primary-color);
+        }
+        .terminal-line .command {
+            color: #fff; 
+        }
+        .terminal-line .info {
+            color: var(--secondary-color);
+        }
+        .terminal-line .success {
+            color: var(--success-color);
+        }
+        .terminal-line .output {
+            color: var(--text-color);
+        }
+        /* NEW: Scan output colors */
+        .terminal-line .scan-plus {
+            color: var(--prompt-color); /* Green */
+        }
+        .terminal-line .scan-warn {
+            color: var(--warn-color); /* Yellow */
+        }
+        /* --- NEW --- */
+        .terminal-line .scan-crit {
+            color: var(--crit-color); /* Red */
+            font-weight: bold;
+        }
+
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 1.2em;
+            background: var(--primary-color);
+            margin-left: 2px;
+            animation: blink 1s infinite;
+        }
+        /* --- End of Terminal Styles --- */
 
         /* --- Scroll Fade-in Animation --- */
         .hidden {
             opacity: 0;
-            transform: translateY(30px);
+            transform: translateY(30px) translateX(-20px);
             transition: opacity 0.6s cubic-bezier(0.645, 0.045, 0.355, 1), 
                         transform 0.6s cubic-bezier(0.645, 0.045, 0.355, 1);
         }
         .show {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(0) translateX(0);
         }
 
         /* --- Responsive Grid & Card Redesign --- */
@@ -317,11 +469,12 @@
             border-radius: 10px;
             padding: 1.5rem;
             box-shadow: 0 4px 10px var(--shadow-color);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
         }
         .card:hover {
             transform: translateY(-5px);
             box-shadow: 0 8px 20px var(--shadow-color-hover);
+            border-color: var(--primary-color); 
         }
         .card h3 {
             color: var(--primary-color);
@@ -345,9 +498,21 @@
             margin-top: 5px;
             width: 40px; 
             text-align: center;
+            animation: ping 2.5s ease-in-out infinite;
         }
         .service-item div {
             flex: 1;
+        }
+
+        @keyframes ping {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.7;
+            }
         }
         
         /* --- "My Toolkit" (Tags) Section Styling --- */
@@ -363,6 +528,8 @@
             border-radius: 5px;
             border: 1px solid var(--card-border);
             transition: all 0.3s ease;
+            position: relative; 
+            overflow: hidden;    
         }
         .toolkit-tag:hover {
             color: var(--primary-color);
@@ -371,16 +538,72 @@
             box-shadow: 0 5px 10px var(--shadow-color);
         }
 
-        /* --- Project Modal Styling --- */
+        /* Scan line animation */
+        .toolkit-tag::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: translateX(-100%);
+            animation: none;
+        }
+        .toolkit-tag.show::after {
+            animation: scan 1.5s cubic-bezier(0.645, 0.045, 0.355, 1) 0.5s;
+        }
+        @keyframes scan {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* --- Project Card Styling --- */
         .project-card {
             display: flex;
             flex-direction: column;
             justify-content: space-between;
         }
+        .project-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .project-icon-placeholder {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            width: 80px;
+            height: 80px;
+            border: 2px solid var(--card-border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: border-color 0.3s ease;
+        }
+        .project-card:hover .project-icon-placeholder {
+            border-color: var(--primary-color);
+        }
+        .project-header h3 {
+            margin-bottom: 0.25rem;
+        }
+        .project-header p {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+            font-style: italic;
+        }
+        .project-card > p { /* Target description p */
+            flex-grow: 1;
+        }
+
+        /* Modal Button (Fill effect) */
         .modal-btn {
             font-family: 'Share Tech Mono', monospace;
-            background: var(--primary-color);
-            color: var(--bg-color);
+            background: transparent; 
+            color: var(--primary-color); 
             border: 1px solid var(--primary-color);
             padding: 0.75rem 1.5rem;
             border-radius: 5px;
@@ -388,12 +611,36 @@
             font-size: 1rem;
             font-weight: bold;
             margin-top: 1.5rem;
-            transition: background 0.3s ease, color 0.3s ease;
+            position: relative; 
+            z-index: 1; 
+            overflow: hidden; 
+            transition: color 0.3s ease; 
+        }
+        .modal-btn span {
+            position: relative;
+            z-index: 2; /* Keep text on top */
+        }
+        .modal-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-color);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease-out;
+            z-index: 1;
         }
         .modal-btn:hover {
-            background: var(--bg-color);
-            color: var(--primary-color);
+            color: var(--bg-color); 
         }
+        .modal-btn:hover::before {
+            transform: scaleX(1); 
+        }
+
+        /* --- Modal Styling --- */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -430,11 +677,9 @@
             transform: scale(1);
         }
         .close-btn {
-            /* MODIFIED: Reset button styles */
             background: none;
             border: none;
             font-family: 'Share Tech Mono', monospace;
-            
             position: absolute;
             top: 1rem;
             right: 1.5rem;
@@ -472,7 +717,7 @@
             font-weight: bold;
         }
 
-        /* --- MODIFIED: List Styling (Certs & Contact) --- */
+        /* --- List Styling (Certs & Contact) --- */
         .icon-list {
             list-style-type: none;
             padding-left: 0;
@@ -480,9 +725,8 @@
         .icon-list li {
             margin-bottom: 1rem;
         }
-        /* Style for links (Contact) and spans (Certs) */
         .icon-list li > a,
-        .icon-list li > span { /* Target direct span child for certs */
+        .icon-list li > span { 
             display: flex;
             align-items: center;
             font-size: 1.1rem;
@@ -490,7 +734,6 @@
             text-decoration: none;
             transition: color 0.3s ease, transform 0.3s ease;
         }
-        /* Specific hover for contact links */
         #contact .icon-list li a:hover {
             color: var(--primary-color);
             transform: translateX(5px);
@@ -498,12 +741,11 @@
         .icon-list li .icon {
             color: var(--primary-color);
             font-size: 1.2rem;
-            width: 35px; /* Fixed width for alignment */
+            width: 35px; 
             text-align: center;
             margin-right: 1rem;
         }
         
-        /* NEW: Fix for long URLs in contact section */
         #contact .icon-list li span {
             word-break: break-all;
         }
@@ -569,9 +811,8 @@
             }
         }
 
-        /* === UPDATED RESPONSIVE STYLES (MOBILE) === */
+        /* === RESPONSIVE STYLES === */
         
-        /* MODIFIED: Breakpoint changed to 850px */
         @media (max-width: 850px) {
             /* General layout */
             header {
@@ -581,11 +822,8 @@
                 padding: 3rem 5%;
             }
             
-            /* Typography & Icons (Tablet) */
-            /* --- FLUID TYPOGRAPHY FIX: Removed font-size for .logo, #hero h1, #hero p, .section-title --- */
-
             .nav-links a {
-                font-size: 1.2rem; /* MODIFIED: Made larger for full-screen menu */
+                font-size: 1.2rem; 
             }
             .card p {
                 font-size: 1rem;
@@ -600,7 +838,6 @@
                 font-size: 1rem;
             }
             
-            /* MODIFIED: icon list styles */
             .icon-list li > a,
             .icon-list li > span {
                 font-size: 1rem;
@@ -609,46 +846,50 @@
                 font-size: 1.1rem;
             }
 
-            /* NEW: About me responsive */
+            /* About me responsive */
             .about-container {
                 flex-direction: column;
                 gap: 2rem;
             }
             .about-image {
-                flex-basis: auto; /* Reset basis */
-                width: 70%; /* Don't be full width */
-                max-width: 250px; /* But not too big */
-                margin: 0 auto; /* Center it */
+                flex-basis: auto; 
+                width: 70%; 
+                max-width: 250px; 
+                margin: 0 auto; 
+            }
+            .terminal-window {
+                min-height: 400px;
+            }
+            .terminal-body {
+                height: 400px;
+                font-size: 0.8rem; 
             }
 
-            /* === MODIFIED: Mobile Navigation Logic (New Style) === */
+            /* Mobile Navigation Logic (Full Screen) */
             .nav-links {
                 position: fixed;
                 top: 0;
-                left: 0; /* MODIFIED: Changed from right */
+                left: 0; 
                 height: 100vh;
-                width: 100vw; /* MODIFIED: Full width */
+                width: 100vw; 
                 background: var(--header-bg);
                 backdrop-filter: blur(20px);
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
                 gap: 2.5rem;
-                
-                /* MODIFIED: Animation changed from slide to fade-in-down */
                 opacity: 0;
                 visibility: hidden;
                 transform: translateY(-20px);
                 transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
-                
-                box-shadow: none; /* MODIFIED: Removed shadow */
-                z-index: 1005; /* Ensures menu is on top of content, but below hamburger */
-                white-space: normal; /* MODIFIED: Allow links to wrap if needed in menu */
+                box-shadow: none; 
+                z-index: 1005; 
+                white-space: normal; 
             }
             .nav-links.active {
-                opacity: 1; /* MODIFIED: Animation */
-                visibility: visible; /* MODIFIED: Animation */
-                transform: translateY(0); /* MODIFIED: Animation */
+                opacity: 1; 
+                visibility: visible; 
+                transform: translateY(0); 
             }
             .hamburger {
                 display: flex;
@@ -663,18 +904,15 @@
                 transform: translateY(-8px) rotate(45deg);
             }
             
-            /* Hide spotlight on mobile (saves performance) */
+            /* Hide spotlight on mobile */
             body::before {
                 display: none;
             }
         }
         
         @media (max-width: 480px) {
-            /* --- FLUID TYPOGRAPHY FIX: Removed font-size for body, .logo, #hero h1, #hero p, .section-title --- */
-
-            /* Typography & Icons (Phone) */
             .nav-links a {
-                font-size: 1.1rem; /* MODIFIED: Sized for full-screen menu */
+                font-size: 1.1rem; 
             }
             .card p {
                 font-size: 0.95rem;
@@ -689,13 +927,16 @@
                 font-size: 0.9rem;
             }
 
-            /* MODIFIED: icon list styles */
             .icon-list li > a,
             .icon-list li > span {
                 font-size: 0.9rem;
             }
             .icon-list li .icon {
                 font-size: 1rem;
+            }
+
+            .terminal-body {
+                font-size: 0.8rem;
             }
         }
     </style>
@@ -725,7 +966,9 @@
 
     <main>
         <section id="hero">
-            <h1 class="hidden"><span id="typing-text"></span></h1>
+            <h1 class="hidden" data-text=""> 
+                <span id="typing-text"></span>
+            </h1>
             <p class="hidden">Cybersecurity trainee with a strong foundation in networking and security analysis.</p>
         </section>
 
@@ -735,8 +978,12 @@
                 <div class="about-image hidden">
                     <img src="/assets/hanzla.jpg" alt="Muhammad Hanzla Profile" />
                 </div>
-                <div class="card about-content hidden">
-                    <p>Cybersecurity trainee with CEH training (ongoing at Corvit) and practical lab experience in scanning, enumeration, and vulnerability assessment. Skilled with Nmap, Wireshark, Nessus, and Shodan for analyzing networks and identifying security gaps. Strong foundation in networking, configuration, and reporting. Eager to apply skills in real-world environments and grow into a professional security engineer.</p>
+                
+                <div class="terminal-window hidden">
+                    <div class="terminal-header">
+                        </div>
+                    <div class="terminal-body" id="terminal-body">
+                        </div>
                 </div>
             </div>
         </section>
@@ -778,17 +1025,17 @@
             <h2 class="section-title hidden">My Toolkit</h2>
             <div class="card hidden">
                 <div class="toolkit-container">
-                    <span class="toolkit-tag">Nmap</span>
-                    <span class="toolkit-tag">Nessus</span>
-                    <span class="toolkit-tag">Shodan</span>
-                    <span class="toolkit-tag">Wireshark</span>
-                    <span class="toolkit-tag">tcpdump</span>
-                    <span class="toolkit-tag">Kali Linux</span>
-                    <span class="toolkit-tag">Windows</span>
-                    <span class="toolkit-tag">Git</span>
-                    <span class="toolkit-tag">IP Subnetting</span>
-                    <span class="toolkit-tag">Router/Switch Config</span>
-                    <span class="toolkit-tag">Firewall Basics</span>
+                    <span class="toolkit-tag hidden">Nmap</span>
+                    <span class="toolkit-tag hidden">Nessus</span>
+                    <span class="toolkit-tag hidden">Shodan</span>
+                    <span class="toolkit-tag hidden">Wireshark</span>
+                    <span class="toolkit-tag hidden">tcpdump</span>
+                    <span class="toolkit-tag hidden">Kali Linux</span>
+                    <span class="toolkit-tag hidden">Windows</span>
+                    <span class="toolkit-tag hidden">Git</span>
+                    <span class="toolkit-tag hidden">IP Subnetting</span>
+                    <span class="toolkit-tag hidden">Router/Switch Config</span>
+                    <span class="toolkit-tag hidden">Firewall Basics</span>
                 </div>
             </div>
         </section>
@@ -796,22 +1043,31 @@
         <section id="projects">
             <h2 class="section-title hidden">Projects (Lab Work)</h2>
             <div class="card-container">
+                
                 <div class="card project-card hidden">
-                    <div>
+                    <div class="project-header">
+                        <div class="project-icon-placeholder">
+                            <i class="fas fa-shield-alt"></i> 
+                        </div>
                         <h3>Vulnerability Assessment Lab</h3>
                         <p>Role: Security Analyst (Lab)</p>
-                        <p>Performed vulnerability scanning and enumeration using Nmap and Nessus in lab environments to identify security gaps and report on findings.</p>
                     </div>
-                    <button class="modal-btn" data-modal="modal1">Learn More</button>
+                    <p>Performed vulnerability scanning and enumeration using Nmap and Nessus in lab environments to identify security gaps and report on findings.</p>
+                    <button class="modal-btn" data-modal="modal1"><span>Learn More</span></button>
                 </div>
+                
                 <div class="card project-card hidden">
-                    <div>
+                    <div class="project-header">
+                        <div class="project-icon-placeholder">
+                            <i class="fas fa-sitemap"></i> 
+                        </div>
                         <h3>Network & Firewall Analysis Lab</h3>
                         <p>Role: Network Engineer (Lab)</p>
-                        <p>Configured small networks, captured traffic with Wireshark to detect anomalies, and tested firewall rules to ensure proper segmentation.</p>
                     </div>
-                    <button class="modal-btn" data-modal="modal2">Learn More</button>
+                    <p>Configured small networks, captured traffic with Wireshark to detect anomalies, and tested firewall rules to ensure proper segmentation.</p>
+                    <button class="modal-btn" data-modal="modal2"><span>Learn More</span></button>
                 </div>
+                
             </div>
         </section>
 
@@ -903,11 +1159,10 @@
     </footer>
 
     <script>
-        /* --- MODIFIED: Professional Pre-loader --- */
+        /* --- Professional Pre-loader --- */
         const preloader = document.getElementById('preloader');
         const loaderText = document.getElementById('loader-text');
         
-        // 1. Define the boot sequence messages and delays
         const bootMessages = [
             { text: "Booting system...", delay: 500 },
             { text: "Initializing kernel v5.1.9-H4NZ...", delay: 700 },
@@ -916,13 +1171,12 @@
             { text: "Starting network services... [OK]", delay: 600 },
             { text: "Initializing security protocols... [ACTIVE]", delay: 550 },
             { text: "System boot complete.", delay: 800 },
-            { text: "", delay: 100 } // Empty line for spacing
+            { text: "", delay: 100 } 
         ];
 
         let msgIndex = 0;
-        let isPageLoaded = false; // Flag to check if window.load has fired
+        let isPageLoaded = false; 
 
-        // 2. Function to display boot sequence line by line
         function showBootLine() {
             if (msgIndex < bootMessages.length) {
                 loaderText.innerHTML += bootMessages[msgIndex].text + '<br>';
@@ -930,55 +1184,40 @@
                 msgIndex++;
                 setTimeout(showBootLine, currentDelay);
             } else {
-                // Boot sequence is done. Check if page is also loaded.
                 if (isPageLoaded) {
                     showWelcome();
                 }
-                // If page isn't loaded yet, the 'load' event listener will call showWelcome()
             }
         }
 
-        // 3. Function to show the final welcome and fade out
         function showWelcome() {
-            // Add the final welcome message
             loaderText.innerHTML += '<br><span style="color: var(--secondary-color); font-size: 1.2rem;">> Welcome to my Portfolio</span>';
 
-            // Create a blinking cursor
             const cursorSpan = document.createElement('span');
             cursorSpan.style.color = 'var(--secondary-color)';
             cursorSpan.style.fontSize = '1.2rem';
-            // Use the existing @keyframes 'blink' from your CSS
             cursorSpan.style.animation = 'blink 0.8s infinite'; 
             cursorSpan.textContent = '_';
             loaderText.appendChild(cursorSpan);
 
-            // Wait a bit, then fade out preloader AND fade in content
             setTimeout(() => {
-                // 1. Fade out preloader
                 preloader.classList.add('loaded');
                 
-                // 2. NEW: Fade in content by adding the class
                 document.querySelector('header').classList.add('content-visible');
                 document.querySelector('main').classList.add('content-visible');
                 document.querySelector('footer').classList.add('content-visible');
 
-                // 3. *** JAVASCRIPT OPTIMIZATION ***
-                // Start the typing loop AFTER content is visible
                 typeLoop();
+                observeTerminal(); 
 
-                // 4. Remove preloader from DOM after its fade-out is complete
-                setTimeout(() => preloader.remove(), 500); // 500ms matches CSS transition
-            }, 1200); // Show welcome for 1.2 seconds
+                setTimeout(() => preloader.remove(), 500); 
+            }, 1200); 
         }
 
-        // 4. Start the boot sequence
         showBootLine();
 
-        // 5. Listen for the actual page load
         window.addEventListener('load', () => {
             isPageLoaded = true;
-            // If boot sequence is *already* done (msgIndex === bootMessages.length), show welcome.
-            // Otherwise, showBootLine() will handle it when it finishes.
             if (msgIndex === bootMessages.length) {
                 showWelcome();
             }
@@ -1008,6 +1247,7 @@
 
         /* --- Typing Text Effect --- */
         const typingElement = document.getElementById('typing-text');
+        const typingH1 = typingElement.parentElement; 
         const typingTexts = [
             "Cybersecurity Trainee",
             "Ethical Hacker (in training)",
@@ -1026,6 +1266,9 @@
                 typeLetter = currentTypingText.slice(0, --typeIndex);
             }
             typingElement.textContent = typeLetter;
+            
+            typingH1.setAttribute('data-text', typeLetter);
+
             if (!isDeleting && typeLetter.length === currentTypingText.length) {
                 isDeleting = true;
                 setTimeout(typeLoop, delayBetween);
@@ -1038,12 +1281,6 @@
             }
         }
         
-        /* --- JAVASCRIPT OPTIMIZATION ---
-         The 'load' listener that was here has been removed.
-         The typeLoop() function is now called by the preloader script.
-        */
-
-
         /* --- Binary Background Generator (Responsive) --- */
         const bg = document.getElementById('binary-bg');
         const particleCount = window.innerWidth < 768 ? 50 : 100;
@@ -1070,6 +1307,124 @@
         const hiddenElements = document.querySelectorAll('.hidden');
         hiddenElements.forEach((el) => observer.observe(el));
         
+        /* --- KALI TERMINAL SCRIPT --- */
+        const terminalBody = document.getElementById('terminal-body');
+        let terminalObserver;
+        let isTerminalRunning = false;
+        const charSpeed = 20; 
+        const lineDelay = 200; 
+
+        /* --- MODIFIED: Updated script to include a vulnerability scan --- */
+        const terminalScript = [
+            { type: 'prompt', text: 'hanzla@kali', host: 'kali', path: '~$ ' },
+            { type: 'command', text: './run-intro.sh', delay: 1000 },
+            { type: 'info', text: '[INFO] Executing portfolio introduction script...', delay: 500 },
+            { type: 'info', text: '[INFO] Loading bio...', delay: 200 },
+            { type: 'output', text: 'Cybersecurity trainee with CEH training (ongoing at Corvit) and practical lab experience in scanning, enumeration, and vulnerability assessment. Skilled with Nmap, Wireshark, Nessus, and Shodan for analyzing networks and identifying security gaps. Strong foundation in networking, configuration, and reporting. Eager to apply skills in real-world environments and grow into a professional security engineer.', delay: 1000 },
+            { type: 'success', text: '[SUCCESS] Bio loaded.', delay: 1000 },
+            { type: 'clear', delay: 500 },
+            { type: 'prompt', text: 'hanzla@kali', host: 'kali', path: '~$ ' },
+            { type: 'command', text: './run-vuln-scan.sh --target 10.0.0.12', delay: 1500 },
+            { type: 'info', text: '[INFO] Initializing scan engine...', delay: 500 },
+            { type: 'info', text: '[INFO] Starting scan on target 10.0.0.12 (WebServer-Dev)...', delay: 1000 },
+            { type: 'scan-plus', text: '[+] Host found: 10.0.0.12', delay: 500 },
+            { type: 'info', text: '[INFO] Host 10.0.0.12: Scanning ports...', delay: 500 },
+            { type: 'scan-warn', text: '[WARN] Host 10.0.0.12: Port 21 (FTP) open. Anonymous login enabled.', delay: 300 },
+            { type: 'scan-warn', text: '[WARN] Host 10.0.0.12: Port 8080 (Jenkins) open. Version 2.138.', delay: 300 },
+            { type: 'scan-crit', text: '[CRITICAL] VULNERABILITY FOUND: RCE on /jenkins/ (CVE-2018-1000861)', delay: 1000 },
+            { type: 'prompt', text: 'hanzla@kali', host: 'kali', path: '~$ ' },
+            { type: 'command', text: 'python3 exploit.py --target 10.0.0.12:8080', delay: 1500 },
+            { type: 'info', text: '[INFO] Sending payload...', delay: 500 },
+            { type: 'success', text: '[SUCCESS] Payload executed. Reverse shell established.', delay: 800 },
+            { type: 'info', text: '[INFO] Injecting process... keylogger.so', delay: 500 },
+            { type: 'scan-crit', text: '[ALERT] KEYLOGGER ACTIVATED. BE CAREFUL.', delay: 1000 },
+            { type: 'prompt', text: 'hanzla@kali', host: 'kali', path: '~/shell $ ' },
+            { type: 'cursor' }
+        ];
+
+        function typeLine(line, onComplete) {
+            let i = 0;
+            const lineEl = document.createElement('div');
+            lineEl.classList.add('terminal-line');
+            
+            // Handle clearing the terminal
+            if (line.type === 'clear') {
+                terminalBody.innerHTML = '';
+                setTimeout(onComplete, line.delay || lineDelay);
+                return;
+            }
+
+            // Handle prompt
+            if (line.type === 'prompt') {
+                lineEl.innerHTML = `<span class="prompt-user">${line.text}</span><span class="prompt-host">@${line.host}</span><span class="command">${line.path}</span>`;
+            }
+
+            terminalBody.appendChild(lineEl);
+            terminalBody.scrollTop = terminalBody.scrollHeight;
+
+            // Handle typing for command/info/output/scan
+            /* --- MODIFIED: Added 'scan-crit' to this array --- */
+            const typesToType = ['command', 'info', 'output', 'success', 'scan-plus', 'scan-warn', 'scan-crit'];
+            
+            if (typesToType.includes(line.type)) {
+                const text = line.text;
+                const typeChar = () => {
+                    if (i < text.length) {
+                        if (i === 0) {
+                            lineEl.innerHTML = `<span class="${line.type}"></span>`;
+                        }
+                        lineEl.querySelector('span').textContent += text.charAt(i);
+                        i++;
+                        terminalBody.scrollTop = terminalBody.scrollHeight;
+                        setTimeout(typeChar, charSpeed);
+                    } else {
+                        setTimeout(onComplete, line.delay || lineDelay);
+                    }
+                };
+                typeChar();
+            } 
+            // Handle cursor
+            else if (line.type === 'cursor') {
+                lineEl.innerHTML += '<span class="cursor"></span>';
+                terminalBody.scrollTop = terminalBody.scrollHeight;
+                onComplete();
+            }
+            // Handle simple prompt (no typing)
+            else {
+                setTimeout(onComplete, line.delay || lineDelay);
+            }
+        }
+
+        function runTerminalScript() {
+            let lineIndex = 0;
+            function nextLine() {
+                if (lineIndex < terminalScript.length) {
+                    typeLine(terminalScript[lineIndex], nextLine);
+                    lineIndex++;
+                }
+            }
+            nextLine();
+        }
+
+        function observeTerminal() {
+            terminalObserver = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting && !isTerminalRunning) {
+                        isTerminalRunning = true;
+                        // Clear the terminal body in case it's re-triggered
+                        terminalBody.innerHTML = ''; 
+                        runTerminalScript();
+                        terminalObserver.unobserve(entry.target); // Run only once
+                    }
+                });
+            }, {
+                threshold: 0.5 
+            });
+            
+            terminalObserver.observe(terminalBody);
+        }
+        /* --- End of Terminal Script --- */
+
         /* --- Modal Logic --- */
         const modalBtns = document.querySelectorAll('.modal-btn');
         const modals = document.querySelectorAll('.modal-overlay');
