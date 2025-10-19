@@ -30,6 +30,7 @@
         }
         html {
             scroll-behavior: smooth;
+            font-size: 100%; /* Use percentage for better accessibility */
         }
         body {
             background-color: var(--bg-color);
@@ -37,10 +38,24 @@
             font-family: 'Share Tech Mono', monospace;
             overflow-x: hidden;
             position: relative;
-            font-size: 16px; /* Set base font size */
+            font-size: 1rem; /* Base font size (usually 16px) */
         }
         
-        /* --- Pre-loader --- */
+        /* --- NEW: Hide content by default for fade-in effect --- */
+        header, main, footer {
+            opacity: 0;
+            /* This is the fade-in transition */
+            transition: opacity 0.8s ease-in-out;
+        }
+        
+        /* This class will be added by JS to trigger the fade-in */
+        .content-visible {
+            opacity: 1;
+        }
+        /* --- End of new CSS --- */
+
+
+        /* --- MODIFIED: Pre-loader --- */
         #preloader {
             position: fixed;
             top: 0;
@@ -48,16 +63,21 @@
             width: 100vw;
             height: 100vh;
             background: var(--bg-color);
+            /* MODIFIED: Align top-left like a console */
             display: flex;
-            justify-content: center;
-            align-items: center;
+            justify-content: flex-start;
+            align-items: flex-start;
             z-index: 9999;
+            /* This is the fade-out transition */
             transition: opacity 0.5s ease;
+            padding: 2rem; /* NEW: Add padding */
         }
         .loader {
             font-family: 'Share Tech Mono', monospace;
             color: var(--primary-color);
-            font-size: 1.2rem;
+            font-size: 1.1rem; /* MODIFIED: Sized for console */
+            line-height: 1.6; /* NEW: Space out lines */
+            white-space: pre-wrap; /* NEW: Allow line breaks */
         }
         #preloader.loaded {
             opacity: 0;
@@ -124,11 +144,27 @@
         }
         .logo {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.8rem;
+            /* --- FLUID TYPOGRAPHY FIX --- */
+            font-size: clamp(1.3rem, 4vw, 1.8rem);
             color: var(--primary-color);
             text-decoration: none;
             animation: glow 2s ease-in-out infinite alternate;
+            position: relative; /* MODIFIED: Added for dot positioning */
         }
+        
+        /* NEW: Online dot for logo */
+        .logo::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--primary-color);
+            bottom: 2px; /* Position at bottom of text */
+            right: -15px; /* Position to the right of text */
+        }
+        
         .nav-links {
             display: flex;
             gap: 2rem;
@@ -178,12 +214,14 @@
         }
         #hero h1 {
             font-family: 'Orbitron', sans-serif;
-            font-size: 2.8rem;
+            /* --- FLUID TYPOGRAPHY FIX --- */
+            font-size: clamp(1.8rem, 6vw, 2.8rem);
             color: var(--primary-color);
             margin-bottom: 0.5rem;
         }
         #hero p {
-            font-size: 1.2rem;
+            /* --- FLUID TYPOGRAPHY FIX --- */
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
             color: var(--secondary-color);
         }
         #typing-text {
@@ -191,14 +229,19 @@
             border-right: 3px solid var(--primary-color);
             padding-right: 5px;
             margin-left: 5px;
-            animation: blink 0.8s infinite;
+            /* MODIFIED: Blinking animation removed */
+            /* animation: blink 0.8s infinite; */
         }
+        
+        /* This keyframe is still used by the preloader, so it stays */
         @keyframes blink {
             0%, 100% {
                 border-color: transparent;
+                color: transparent;
             }
             50% {
                 border-color: var(--primary-color);
+                color: inherit; /* Use for the cursor span in preloader */
             }
         }
 
@@ -213,7 +256,8 @@
             border-bottom: 1px solid var(--card-border);
         }
         .section-title {
-            font-size: 2rem;
+            /* --- FLUID TYPOGRAPHY FIX --- */
+            font-size: clamp(1.5rem, 5vw, 2rem);
             margin-bottom: 2rem;
             border-left: 5px solid var(--primary-color);
             padding-left: 1rem;
@@ -529,20 +573,10 @@
             }
             
             /* Typography & Icons (Tablet) */
-            .logo {
-                font-size: 1.5rem;
-            }
+            /* --- FLUID TYPOGRAPHY FIX: Removed font-size for .logo, #hero h1, #hero p, .section-title --- */
+
             .nav-links a {
-                font-size: 1.1rem;
-            }
-            #hero h1 {
-                font-size: 2.2rem;
-            }
-            #hero p {
-                font-size: 1.1rem;
-            }
-            .section-title {
-                font-size: 1.8rem;
+                font-size: 1.1rem; /* This one is inside the mobile menu, so it's fine to keep */
             }
             .card p {
                 font-size: 1rem;
@@ -619,24 +653,9 @@
         }
         
         @media (max-width: 480px) {
-            /* Base font size for small phones */
-            body {
-                font-size: 15px;
-            }
+            /* --- FLUID TYPOGRAPHY FIX: Removed font-size for body, .logo, #hero h1, #hero p, .section-title --- */
 
             /* Typography & Icons (Phone) */
-            .logo {
-                font-size: 1.3rem;
-            }
-            #hero h1 {
-                font-size: 1.8rem;
-            }
-            #hero p {
-                font-size: 1rem;
-            }
-            .section-title {
-                font-size: 1.5rem;
-            }
             .nav-links a {
                 font-size: 1rem;
             }
@@ -667,13 +686,13 @@
 <body>
     
     <div id="preloader">
-        <div class="loader" id="loader-text">Loading modules...</div>
+        <div class="loader" id="loader-text"></div>
     </div>
 
     <div class="binary-bg" id="binary-bg"></div>
 
     <header>
-        <a href="#hero" class="logo">Muhammad Hanzla</a>
+        <a href="#hero" class="logo">Hanzla</a>
         <nav class="nav-links" id="nav-links">
             <a href="#about">About</a>
             <a href="#services">Services</a>
@@ -867,35 +886,88 @@
     </footer>
 
     <script>
-        /* --- Pre-loader --- */
+        /* --- MODIFIED: Professional Pre-loader --- */
         const preloader = document.getElementById('preloader');
         const loaderText = document.getElementById('loader-text');
-        const loaderMessages = [
-            "Loading modules...",
-            "Initializing kernel...",
-            "Accessing mainframe...",
-            "Security protocols active...",
-            "Welcome, Muhammad Hanzla."
+        
+        // 1. Define the boot sequence messages and delays
+        const bootMessages = [
+            { text: "Booting system...", delay: 500 },
+            { text: "Initializing kernel v5.1.9-H4NZ...", delay: 700 },
+            { text: "Loading system modules... [OK]", delay: 450 },
+            { text: "Mounting file systems... [OK]", delay: 400 },
+            { text: "Starting network services... [OK]", delay: 600 },
+            { text: "Initializing security protocols... [ACTIVE]", delay: 550 },
+            { text: "System boot complete.", delay: 800 },
+            { text: "", delay: 100 } // Empty line for spacing
         ];
+
         let msgIndex = 0;
-        
-        const loaderInterval = setInterval(() => {
-            msgIndex++;
-            if (msgIndex < loaderMessages.length) {
-                loaderText.textContent = loaderMessages[msgIndex];
+        let isPageLoaded = false; // Flag to check if window.load has fired
+
+        // 2. Function to display boot sequence line by line
+        function showBootLine() {
+            if (msgIndex < bootMessages.length) {
+                loaderText.innerHTML += bootMessages[msgIndex].text + '<br>';
+                let currentDelay = bootMessages[msgIndex].delay;
+                msgIndex++;
+                setTimeout(showBootLine, currentDelay);
             } else {
-                clearInterval(loaderInterval);
+                // Boot sequence is done. Check if page is also loaded.
+                if (isPageLoaded) {
+                    showWelcome();
+                }
+                // If page isn't loaded yet, the 'load' event listener will call showWelcome()
             }
-        }, 800);
-        
-        window.addEventListener('load', () => {
-            clearInterval(loaderInterval);
-            loaderText.textContent = "Welcome, Muhammad Hanzla.";
+        }
+
+        // 3. Function to show the final welcome and fade out
+        function showWelcome() {
+            // Add the final welcome message
+            loaderText.innerHTML += '<br><span style="color: var(--secondary-color); font-size: 1.2rem;">> Welcome to my Portfolio</span>';
+
+            // Create a blinking cursor
+            const cursorSpan = document.createElement('span');
+            cursorSpan.style.color = 'var(--secondary-color)';
+            cursorSpan.style.fontSize = '1.2rem';
+            // Use the existing @keyframes 'blink' from your CSS
+            cursorSpan.style.animation = 'blink 0.8s infinite'; 
+            cursorSpan.textContent = '_';
+            loaderText.appendChild(cursorSpan);
+
+            // Wait a bit, then fade out preloader AND fade in content
             setTimeout(() => {
+                // 1. Fade out preloader
                 preloader.classList.add('loaded');
-                setTimeout(() => preloader.remove(), 500);
-            }, 500);
+                
+                // 2. NEW: Fade in content by adding the class
+                document.querySelector('header').classList.add('content-visible');
+                document.querySelector('main').classList.add('content-visible');
+                document.querySelector('footer').classList.add('content-visible');
+
+                // 3. *** JAVASCRIPT OPTIMIZATION ***
+                // Start the typing loop AFTER content is visible
+                typeLoop();
+
+                // 4. Remove preloader from DOM after its fade-out is complete
+                setTimeout(() => preloader.remove(), 500); // 500ms matches CSS transition
+            }, 1200); // Show welcome for 1.2 seconds
+        }
+
+        // 4. Start the boot sequence
+        showBootLine();
+
+        // 5. Listen for the actual page load
+        window.addEventListener('load', () => {
+            isPageLoaded = true;
+            // If boot sequence is *already* done (msgIndex === bootMessages.length), show welcome.
+            // Otherwise, showBootLine() will handle it when it finishes.
+            if (msgIndex === bootMessages.length) {
+                showWelcome();
+            }
         });
+        /* --- End of Pre-loader Script --- */
+
         
         /* --- Spotlight Effect --- */
         document.addEventListener('mousemove', (e) => {
@@ -948,7 +1020,12 @@
                 setTimeout(typeLoop, isDeleting ? eraseSpeed : typeSpeed);
             }
         }
-        window.addEventListener('load', typeLoop);
+        
+        /* --- JAVASCRIPT OPTIMIZATION ---
+          The 'load' listener that was here has been removed.
+          The typeLoop() function is now called by the preloader script.
+        */
+
 
         /* --- Binary Background Generator (Responsive) --- */
         const bg = document.getElementById('binary-bg');
@@ -1020,4 +1097,3 @@
     </script>
 </body>
 </html>
-
