@@ -529,7 +529,7 @@
             border: 1px solid var(--card-border);
             transition: all 0.3s ease;
             position: relative; 
-            overflow: hidden;    
+            overflow: hidden;    
         }
         .toolkit-tag:hover {
             color: var(--primary-color);
@@ -976,7 +976,8 @@
             <h2 class="section-title hidden">About Me</h2>
             <div class="about-container">
                 <div class="about-image hidden">
-                    <img src="/assets/hanzla.jpg" alt="Muhammad Hanzla Profile" />
+                    <!-- Updated to use a placeholder image for stability -->
+                    <img src="https://placehold.co/300x300/1a1a1a/00ffe1?text=Hanzla+Profile" alt="Muhammad Hanzla Profile" />
                 </div>
                 
                 <div class="terminal-window hidden">
@@ -1314,16 +1315,97 @@
         const charSpeed = 20; 
         const lineDelay = 200; 
 
-        /* --- MODIFIED: Updated script to include a vulnerability scan --- */
+        /* --- IP FETCHING UTILITY --- */
+        async function fetchIPAddress() {
+            try {
+                // Fetch the public IP from a third-party service
+                const response = await fetch('https://api.ipify.org?format=json');
+                if (!response.ok) throw new Error('API failed');
+                const data = await response.json();
+                return data.ip || '0.0.0.0 (Error)';
+            } catch (error) {
+                console.error('IP fetch error:', error);
+                // Return a safe, dramatic fallback IP
+                return '127.0.0.1 (Localhost Fallback)';
+            }
+        }
+        
+        /* --- NEW: Device Info Utility --- */
+        function getClientDeviceInfo() {
+            const userAgent = navigator.userAgent;
+            let os = "Unknown OS";
+            let browser = "Unknown Browser";
+            let deviceType = "Desktop";
+
+            // Detect OS
+            if (userAgent.match(/Windows NT 10.0/i)) os = "Windows 10/11";
+            else if (userAgent.match(/Windows NT 6\.\d/i)) os = "Windows 7/8";
+            else if (userAgent.match(/Macintosh|Mac OS X/i)) os = "macOS/iOS";
+            else if (userAgent.match(/Android/i)) os = "Android";
+            else if (userAgent.match(/Linux/i)) os = "Linux";
+            // iOS check must come after general Mac check if present
+            if (userAgent.match(/iPhone|iPad|iPod/i)) {
+                os = "iOS/iPadOS";
+                deviceType = "Mobile/Tablet";
+            } else if (userAgent.match(/Android/i)) {
+                deviceType = "Mobile/Tablet";
+            }
+            // Better OS version detail (basic)
+            const osMatch = userAgent.match(/(Windows NT [\d\.]+)|(Mac OS X [\d_\.]+)|(Android [\d\.]+)|(Linux)/i);
+            if (osMatch) {
+                os = osMatch[0].replace(/_/g, '.') || os;
+            }
+
+
+            // Detect Browser and version
+            const browserMatch = userAgent.match(/(Chrome|Firefox|Safari|Edge|OPR)\/?\s*(\d+)/i);
+            if (browserMatch) {
+                const name = browserMatch[1];
+                const version = browserMatch[2];
+                if (name === 'OPR') {
+                    browser = `Opera ${version}`;
+                } else if (name === 'Edge' || userAgent.match(/Edg/i)) {
+                    // Check for modern Edge (Edg)
+                    const edgeMatch = userAgent.match(/Edg\/(\d+)/i);
+                    browser = `Edge ${edgeMatch ? edgeMatch[1] : version}`;
+                } else if (name === 'Chrome' && !userAgent.match(/Edg/i)) {
+                    browser = `Chrome ${version}`;
+                } else if (name === 'Firefox') {
+                    browser = `Firefox ${version}`;
+                } else if (name === 'Safari' && !userAgent.match(/Chrome/i)) {
+                    browser = `Safari ${version}`;
+                }
+            }
+
+
+            return { os, browser, deviceType };
+        }
+        /* --- End NEW: Device Info Utility --- */
+
+        /* --- MODIFIED: Updated script to include IP fetch and display --- */
         const terminalScript = [
-            { type: 'prompt', text: 'hanzla@kali', host: 'kali', path: '~$ ' },
+            { type: 'prompt', text: 'hanzla', host: 'kali', path: '~$ ' },
             { type: 'command', text: './run-intro.sh', delay: 1000 },
             { type: 'info', text: '[INFO] Executing portfolio introduction script...', delay: 500 },
             { type: 'info', text: '[INFO] Loading bio...', delay: 200 },
             { type: 'output', text: 'Cybersecurity trainee with CEH training (ongoing at Corvit) and practical lab experience in scanning, enumeration, and vulnerability assessment. Skilled with Nmap, Wireshark, Nessus, and Shodan for analyzing networks and identifying security gaps. Strong foundation in networking, configuration, and reporting. Eager to apply skills in real-world environments and grow into a professional security engineer.', delay: 1000 },
             { type: 'success', text: '[SUCCESS] Bio loaded.', delay: 1000 },
+            // --- NEW DEVICE & IP CHECK SEQUENCE ---
             { type: 'clear', delay: 500 },
-            { type: 'prompt', text: 'hanzla@kali', host: 'kali', path: '~$ ' },
+            { type: 'prompt', text: 'hanzla', host: 'kali', path: '~$ ' },
+            { type: 'command', text: 'nmap -sV --script=http-useragent.nse [external_ip]', delay: 1500 },
+            { type: 'client-info', placeholder: '[DEVICE_TYPE]', text: '[+] Target Device Detected: [DEVICE_TYPE]', delay: 300 },
+            { type: 'client-info', placeholder: '[OS_INFO]', text: '[+] Operating System: [OS_INFO]', delay: 300 },
+            { type: 'client-info', placeholder: '[BROWSER_INFO]', text: '[+] Browser/Client: [BROWSER_INFO]', delay: 300 },
+            { type: 'info', text: '[INFO] Attempting to map local network interface...', delay: 1000 },
+            { type: 'scan-crit', text: '[ACCESS DENIED] Local IP mapping (192.168.x.x) blocked by browser security policy.', delay: 1000 },
+            { type: 'prompt', text: 'hanzla', host: 'kali', path: '~$ ' },
+            { type: 'command', text: 'ip addr show eth0 | grep inet', delay: 1000 }, // Simulated command to check local network adapter
+            { type: 'info', text: '[INFO] Querying external API for public IP...', delay: 500 },
+            { type: 'fetch-ip', delay: 1000 }, // Special step to trigger the async IP fetch
+            { type: 'scan-crit', text: '[ALERT] EXTERNAL IP FOUND: [IP_ADDRESS_HERE] (Geolocation may apply)', delay: 1000 },
+            // --- END NEW DEVICE & IP CHECK SEQUENCE ---
+            { type: 'prompt', text: 'hanzla', host: 'kali', path: '~$ ' },
             { type: 'command', text: './run-vuln-scan.sh --target 10.0.0.12', delay: 1500 },
             { type: 'info', text: '[INFO] Initializing scan engine...', delay: 500 },
             { type: 'info', text: '[INFO] Starting scan on target 10.0.0.12 (WebServer-Dev)...', delay: 1000 },
@@ -1332,13 +1414,13 @@
             { type: 'scan-warn', text: '[WARN] Host 10.0.0.12: Port 21 (FTP) open. Anonymous login enabled.', delay: 300 },
             { type: 'scan-warn', text: '[WARN] Host 10.0.0.12: Port 8080 (Jenkins) open. Version 2.138.', delay: 300 },
             { type: 'scan-crit', text: '[CRITICAL] VULNERABILITY FOUND: RCE on /jenkins/ (CVE-2018-1000861)', delay: 1000 },
-            { type: 'prompt', text: 'hanzla@kali', host: 'kali', path: '~$ ' },
+            { type: 'prompt', text: 'hanzla', host: 'kali', path: '~$ ' },
             { type: 'command', text: 'python3 exploit.py --target 10.0.0.12:8080', delay: 1500 },
             { type: 'info', text: '[INFO] Sending payload...', delay: 500 },
             { type: 'success', text: '[SUCCESS] Payload executed. Reverse shell established.', delay: 800 },
             { type: 'info', text: '[INFO] Injecting process... keylogger.so', delay: 500 },
             { type: 'scan-crit', text: '[ALERT] KEYLOGGER ACTIVATED. BE CAREFUL.', delay: 1000 },
-            { type: 'prompt', text: 'hanzla@kali', host: 'kali', path: '~/shell $ ' },
+            { type: 'prompt', text: 'hanzla', host: 'kali', path: '~/shell $ ' },
             { type: 'cursor' }
         ];
 
@@ -1362,18 +1444,20 @@
             terminalBody.appendChild(lineEl);
             terminalBody.scrollTop = terminalBody.scrollHeight;
 
-            // Handle typing for command/info/output/scan
-            /* --- MODIFIED: Added 'scan-crit' to this array --- */
-            const typesToType = ['command', 'info', 'output', 'success', 'scan-plus', 'scan-warn', 'scan-crit'];
+            // Handle typing for command/info/output/scan/client-info
+            const typesToType = ['command', 'info', 'output', 'success', 'scan-plus', 'scan-warn', 'scan-crit', 'client-info'];
             
             if (typesToType.includes(line.type)) {
                 const text = line.text;
                 const typeChar = () => {
                     if (i < text.length) {
-                        if (i === 0) {
-                            lineEl.innerHTML = `<span class="${line.type}"></span>`;
+                        if (i === 0 && line.type !== 'prompt') {
+                            // Use line.type as class, but client-info should use scan-plus styling
+                            const className = line.type === 'client-info' ? 'scan-plus' : line.type;
+                            lineEl.innerHTML = `<span class="${className}"></span>`;
                         }
-                        lineEl.querySelector('span').textContent += text.charAt(i);
+                        const targetSpan = lineEl.querySelector('span') || lineEl;
+                        targetSpan.textContent += text.charAt(i);
                         i++;
                         terminalBody.scrollTop = terminalBody.scrollHeight;
                         setTimeout(typeChar, charSpeed);
@@ -1395,12 +1479,51 @@
             }
         }
 
-        function runTerminalScript() {
+        async function runTerminalScript() {
             let lineIndex = 0;
-            function nextLine() {
+            const deviceInfo = getClientDeviceInfo();
+
+            // Inject device info into the script before running
+            terminalScript.forEach(line => {
+                if (line.type === 'client-info') {
+                    if (line.placeholder === '[DEVICE_TYPE]') {
+                        line.text = line.text.replace('[DEVICE_TYPE]', deviceInfo.deviceType);
+                    } else if (line.placeholder === '[OS_INFO]') {
+                        line.text = line.text.replace('[OS_INFO]', deviceInfo.os);
+                    } else if (line.placeholder === '[BROWSER_INFO]') {
+                        line.text = line.text.replace('[BROWSER_INFO]', deviceInfo.browser);
+                    }
+                }
+            });
+
+            async function nextLine() {
                 if (lineIndex < terminalScript.length) {
-                    typeLine(terminalScript[lineIndex], nextLine);
+                    const line = terminalScript[lineIndex];
+
+                    if (line.type === 'fetch-ip') {
+                        // 1. Fetch the IP asynchronously
+                        const ipAddress = await fetchIPAddress();
+                        
+                        // 2. Locate the next line (the ALERT) and inject the real IP
+                        const alertLineIndex = lineIndex + 1;
+                        if (terminalScript[alertLineIndex] && terminalScript[alertLineIndex].type === 'scan-crit') {
+                            terminalScript[alertLineIndex].text = terminalScript[alertLineIndex].text.replace('[IP_ADDRESS_HERE]', ipAddress);
+                        }
+                        
+                        // 3. Wait for the set delay
+                        await new Promise(resolve => setTimeout(resolve, line.delay || lineDelay));
+                        lineIndex++;
+                        nextLine();
+                        return;
+                    }
+                    
+                    // Standard line processing via Promise/Callback conversion
+                    await new Promise(resolve => typeLine(line, resolve));
                     lineIndex++;
+                    nextLine();
+
+                } else {
+                    isTerminalRunning = false;
                 }
             }
             nextLine();
@@ -1421,7 +1544,7 @@
                 threshold: 0.5 
             });
             
-            terminalObserver.observe(terminalBody);
+            terminalObserver.observe(document.querySelector('.terminal-window'));
         }
         /* --- End of Terminal Script --- */
 
