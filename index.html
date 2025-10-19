@@ -1,769 +1,1022 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Portfolio</title>
-    <link rel="stylesheet" href="assets/swiper-bundle.min.css" />
-    <link rel="stylesheet" href="assets/newcss.css" />
-    <link
-      rel="stylesheet"
-      href="https://unicons.iconscout.com/release/v4.0.8/css/line.css"
-    />
-  </head>
+    <title>Muhammad Hanzla | Cybersecurity Trainee</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <style>
+        /* --- CSS Variables (Color Theme) --- */
+        :root {
+            --bg-color: #0d0d0d;
+            --header-bg: rgba(0, 0, 0, 0.85);
+            --card-bg: #1a1a1a;
+            --card-border: #2a2a2a;
+            --primary-color: #00ffe1;
+            --secondary-color: #b5f5ff;
+            --text-color: #ccc;
+            --shadow-color: rgba(0, 255, 225, 0.1);
+            --shadow-color-hover: rgba(0, 255, 225, 0.2);
+            --spotlight-size: 400px;
+        }
 
-  <body oncontextmenu="return false">
-    <header class="header" id="header">
-      <nav class="nav container">
-        <a href="#" class="nav__logo">
-          <img class="mw-100" src="./assets/img/logo-1.png"  alt="Logo" style="width: 90px; color: #ffffff;">
-        </a>
-        <div class="nav__menu" id="nav-menu">
-          <ul class="nav__list grid">
-            <li class="nav__item">
-              <a href="#home" class="nav__link active-link">
-                <i class="uil uil-estate nav__icon"></i>Home
-              </a>
-            </li>
-            <li class="nav__item">
-              <a href="#about" class="nav__link">
-                <i class="uil uil-user nav__icon"></i>About
-              </a>
-            </li>
-            <li class="nav__item">
-              <a href="#skills" class="nav__link">
-                <i class="uil uil-file-alt nav__icon"></i>Skills
-              </a>
-            </li>
-            <li class="nav__item">
-              <a href="#qualification" class="nav__link">
-                <i class="uil uil-briefcase-alt nav__icon"></i>Qualification
-              </a>
-            </li>
-            <li class="nav__item">
-              <a href="#portfolio" class="nav__link">
-                <i class="uil uil-scenery nav__icon"></i>Projects
-              </a>
-            </li>
-            <li class="nav__item">
-              <a href="#contact" class="nav__link">
-                <i class="uil uil-message nav__icon"></i>Contact-Me
-              </a>
-            </li>
-          </ul>
-          <i class="uil uil-times nav__close" id="nav-close"></i>
-        </div>
-        <div class="nav__btns">
-          <!-- Theme change button -->
-          <i class="uil uil-moon change-theme" id="theme-button"></i>
+        /* --- General & Reset --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Share Tech Mono', monospace;
+            overflow-x: hidden;
+            position: relative;
+            font-size: 16px; /* Set base font size */
+        }
+        
+        /* --- Pre-loader --- */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+        .loader {
+            font-family: 'Share Tech Mono', monospace;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+        #preloader.loaded {
+            opacity: 0;
+            visibility: hidden;
+        }
 
-          <div class="nav__toggle" id="nav-toggle">
-            <i class="uil uil-apps"></i>
-          </div>
+        /* --- Spotlight Mouse Effect --- */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(
+                circle at var(--x, 50%) var(--y, 50%),
+                rgba(255, 255, 255, 0.05) 0,
+                rgba(255, 255, 255, 0.0) var(--spotlight-size),
+                rgba(255, 255, 255, 0.0) 100%
+            );
+            transition: background 0.1s ease-out;
+            pointer-events: none;
+        }
+
+        /* --- Background Animation --- */
+        .binary-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            z-index: -2;
+        }
+        .binary-bg span {
+            position: absolute;
+            top: -20px;
+            color: var(--primary-color);
+            font-size: 18px;
+            animation: fall linear infinite;
+            opacity: 0.1;
+        }
+        @keyframes fall {
+            to {
+                transform: translateY(110vh);
+                opacity: 0;
+            }
+        }
+        
+        /* --- Sticky Header & Navigation --- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 10%;
+            background: var(--header-bg);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px var(--primary-color);
+            position: sticky;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        .nav-links a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 1rem;
+            position: relative;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -4px;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: width 0.3s ease-in-out;
+        }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            flex-direction: column;
+            gap: 5px;
+            z-index: 1010; /* Ensures hamburger is on top of slide-out menu */
+        }
+        .hamburger .line {
+            width: 25px;
+            height: 3px;
+            background: var(--primary-color);
+            transition: all 0.3s ease;
+        }
+
+        /* --- Hero Section --- */
+        #hero {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            min-height: 60vh;
+            padding: 4rem 2rem;
+        }
+        #hero h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.8rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        #hero p {
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+        }
+        #typing-text {
+            display: inline-block;
+            border-right: 3px solid var(--primary-color);
+            padding-right: 5px;
+            margin-left: 5px;
+            animation: blink 0.8s infinite;
+        }
+        @keyframes blink {
+            0%, 100% {
+                border-color: transparent;
+            }
+            50% {
+                border-color: var(--primary-color);
+            }
+        }
+
+        /* --- General Section & Title Styling --- */
+        main {
+            width: 100%;
+        }
+        section {
+            padding: 4rem 10%;
+        }
+        section:not(:last-of-type) {
+            border-bottom: 1px solid var(--card-border);
+        }
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            border-left: 5px solid var(--primary-color);
+            padding-left: 1rem;
+            color: var(--primary-color);
+        }
+        
+        /* --- NEW: About Me Section Styles --- */
+        .about-container {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+        }
+        .about-image {
+            flex-basis: 300px; /* Base size */
+            flex-shrink: 0;
+        }
+        .about-image img {
+            width: 100%; /* Make image fill the container */
+            height: auto;
+            border-radius: 50%;
+            border: 4px solid var(--primary-color);
+            box-shadow: 0 0 25px var(--shadow-color-hover);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .about-image img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px var(--shadow-color-hover);
+        }
+        .about-content {
+            flex-grow: 1;
+        }
+
+        /* --- Scroll Fade-in Animation --- */
+        .hidden {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s cubic-bezier(0.645, 0.045, 0.355, 1), 
+                        transform 0.6s cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
+        .show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Responsive Grid & Card Redesign --- */
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 10px var(--shadow-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px var(--shadow-color-hover);
+        }
+        .card h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-family: 'Orbitron', sans-serif;
+        }
+        .card p {
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        /* --- "What I Do" (Services) Section Styling --- */
+        .service-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+        }
+        .service-item .icon {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-top: 5px;
+            width: 40px; 
+            text-align: center;
+        }
+        .service-item div {
+            flex: 1;
+        }
+        
+        /* --- "My Toolkit" (Tags) Section Styling --- */
+        .toolkit-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        .toolkit-tag {
+            background: var(--card-border);
+            color: var(--secondary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            border: 1px solid var(--card-border);
+            transition: all 0.3s ease;
+        }
+        .toolkit-tag:hover {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px var(--shadow-color);
+        }
+
+        /* --- Project Modal Styling --- */
+        .project-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .modal-btn {
+            font-family: 'Share Tech Mono', monospace;
+            background: var(--primary-color);
+            color: var(--bg-color);
+            border: 1px solid var(--primary-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            margin-top: 1.5rem;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        .modal-btn:hover {
+            background: var(--bg-color);
+            color: var(--primary-color);
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 10px;
+            border: 1px solid var(--primary-color);
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 0 30px var(--shadow-color-hover);
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+        .close-btn {
+            /* MODIFIED: Reset button styles */
+            background: none;
+            border: none;
+            font-family: 'Share Tech Mono', monospace;
+            
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .close-btn:hover {
+            color: var(--primary-color);
+        }
+        .modal-content h3 {
+            color: var(--primary-color);
+            font-family: 'Orbitron', sans-serif;
+            margin-bottom: 1rem;
+        }
+        .modal-content p {
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+        .modal-content ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .modal-content li {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 0.75rem;
+        }
+        .modal-content li::before {
+            content: '»';
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        /* --- MODIFIED: List Styling (Certs & Contact) --- */
+        .icon-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .icon-list li {
+            margin-bottom: 1rem;
+        }
+        /* Style for links (Contact) and spans (Certs) */
+        .icon-list li > a,
+        .icon-list li > span { /* Target direct span child for certs */
+            display: flex;
+            align-items: center;
+            font-size: 1.1rem;
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+        /* Specific hover for contact links */
+        #contact .icon-list li a:hover {
+            color: var(--primary-color);
+            transform: translateX(5px);
+        }
+        .icon-list li .icon {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            width: 35px; /* Fixed width for alignment */
+            text-align: center;
+            margin-right: 1rem;
+        }
+        
+        /* --- Back to Top Button --- */
+        #back-to-top {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            background: var(--primary-color);
+            color: var(--bg-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            text-decoration: none;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+            z-index: 900;
+        }
+        #back-to-top:hover {
+            transform: translateY(-5px);
+        }
+        #back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* --- Custom Scrollbar --- */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-color);
+        }
+
+        /* --- Footer --- */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: #0c0c0c;
+            color: var(--primary-color);
+            border-top: 1px solid var(--primary-color);
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 5px var(--primary-color);
+            }
+            to {
+                text-shadow: 0 0 20px var(--primary-color), 0 0 40px var(--primary-color);
+            }
+        }
+
+        /* === UPDATED RESPONSIVE STYLES (MOBILE) === */
+        
+        @media (max-width: 768px) {
+            /* General layout */
+            header {
+                padding: 1.5rem 5%;
+            }
+            section, #hero {
+                padding: 3rem 5%;
+            }
+            
+            /* Typography & Icons (Tablet) */
+            .logo {
+                font-size: 1.5rem;
+            }
+            .nav-links a {
+                font-size: 1.1rem;
+            }
+            #hero h1 {
+                font-size: 2.2rem;
+            }
+            #hero p {
+                font-size: 1.1rem;
+            }
+            .section-title {
+                font-size: 1.8rem;
+            }
+            .card p {
+                font-size: 1rem;
+            }
+            .service-item .icon {
+                font-size: 1.8rem;
+            }
+            .toolkit-tag {
+                font-size: 0.9rem;
+            }
+            .modal-btn {
+                font-size: 1rem;
+            }
+            
+            /* MODIFIED: icon list styles */
+            .icon-list li > a,
+            .icon-list li > span {
+                font-size: 1rem;
+            }
+            .icon-list li .icon {
+                font-size: 1.1rem;
+            }
+
+            /* NEW: About me responsive */
+            .about-container {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            .about-image {
+                flex-basis: auto; /* Reset basis */
+                width: 70%; /* Don't be full width */
+                max-width: 250px; /* But not too big */
+                margin: 0 auto; /* Center it */
+            }
+
+            /* Mobile Navigation Logic */
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: 0;
+                height: 100vh;
+                width: 60%;
+                background: var(--header-bg);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 2.5rem;
+                transform: translateX(100%);
+                transition: transform 0.3s ease-in-out;
+                box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+                z-index: 1005; /* Ensures menu is on top of content, but below hamburger */
+            }
+            .nav-links.active {
+                transform: translateX(0);
+            }
+            .hamburger {
+                display: flex;
+            }
+            .hamburger.active .line:nth-child(1) {
+                transform: translateY(8px) rotate(-45deg);
+            }
+            .hamburger.active .line:nth-child(2) {
+                opacity: 0;
+            }
+            .hamburger.active .line:nth-child(3) {
+                transform: translateY(-8px) rotate(45deg);
+            }
+            
+            /* Hide spotlight on mobile (saves performance) */
+            body::before {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            /* Base font size for small phones */
+            body {
+                font-size: 15px;
+            }
+
+            /* Typography & Icons (Phone) */
+            .logo {
+                font-size: 1.3rem;
+            }
+            #hero h1 {
+                font-size: 1.8rem;
+            }
+            #hero p {
+                font-size: 1rem;
+            }
+            .section-title {
+                font-size: 1.5rem;
+            }
+            .nav-links a {
+                font-size: 1rem;
+            }
+            .card p {
+                font-size: 0.95rem;
+            }
+            .service-item .icon {
+                font-size: 1.6rem;
+            }
+            .toolkit-tag {
+                font-size: 0.8rem;
+            }
+            .modal-btn {
+                font-size: 0.9rem;
+            }
+
+            /* MODIFIED: icon list styles */
+            .icon-list li > a,
+            .icon-list li > span {
+                font-size: 0.9rem;
+            }
+            .icon-list li .icon {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="preloader">
+        <div class="loader" id="loader-text">Loading modules...</div>
+    </div>
+
+    <div class="binary-bg" id="binary-bg"></div>
+
+    <header>
+        <a href="#hero" class="logo">Muhammad Hanzla</a>
+        <nav class="nav-links" id="nav-links">
+            <a href="#about">About</a>
+            <a href="#services">Services</a>
+            <a href="#projects">Projects</a>
+            <a href="#contact">Contact</a>
+        </nav>
+        <div class="hamburger" id="hamburger">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
         </div>
-      </nav>
     </header>
-    <!-- main-->
 
-    <main class="main">
-      <!--========================= Home =====================-->
+    <main>
+        <section id="hero">
+            <h1 class="hidden"><span id="typing-text"></span></h1>
+            <p class="hidden">Cybersecurity trainee with a strong foundation in networking and security analysis.</p>
+        </section>
 
-      <section class="home section" id="home">
-        <div class="home__container container grid">
-          <div class="home__content grid">
-            <div class="home__social">
-              <a
-                href="https://www.linkedin.com/in/hanzla-970219225"
-                target="_blank"
-                class="home__social-icon"
-              >
-                <i class="uil uil-linkedin-alt home__icon"></i>
-              </a>
-
-              <a
-                href="https://github.com/hanzla-s-786"
-                target="_blank"
-                class="home__social-icon"
-              >
-                <i class="uil uil-github-alt home__icon"></i>
-              </a>
-            </div>
-            <div class="home__img">
-              <svg
-                class="home__blob"
-                viewBox="0 0 200 187"
-                xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
-              >
-                <mask id="mask0" mask-type="alpha">
-                  <path
-                    d="M190.312 36.4879C206.582 62.1187 201.309 102.826 182.328 134.186C163.346 165.547 
-                      130.807 187.559 100.226 186.353C69.6454 185.297 41.0228 161.023 21.7403 129.362C2.45775 
-                      97.8511 -7.48481 59.1033 6.67581 34.5279C20.9871 10.1032 59.7028 -0.149132 97.9666 
-                      0.00163737C136.23 0.303176 174.193 10.857 190.312 36.4879Z"
-                  />
-                </mask>
-                <g mask="url(#mask0)">
-                  <path
-                    d="M190.312 36.4879C206.582 62.1187 201.309 102.826 182.328 134.186C163.346 
-                      165.547 130.807 187.559 100.226 186.353C69.6454 185.297 41.0228 161.023 21.7403 
-                      129.362C2.45775 97.8511 -7.48481 59.1033 6.67581 34.5279C20.9871 10.1032 59.7028 
-                     -0.149132 97.9666 0.00163737C136.23 0.303176 174.193 10.857 190.312 36.4879Z"
-                  />
-                  <image
-                    class="home__blob-img"
-                    x="-79"
-                    y="-46"
-                    xlink:href="assets/img/p.jpg"
-                  />
-                </g>
-              </svg>
-            </div>
-            <div class="home__data">
-              <div class="home__title  animated-text">
-                I'm  <span></span>
-            </div>
-              <h3 class="home__subtitle">
-                Information Technology Student
-              </h3>
-              <p class="home__description">
-                A Final-year undergraduate student at
-                <strong>University of the Punjab </strong>
-              </p>
-              <a href="#contact" class="button button--flex">
-                Contact me<i class="uil uil-message button__icon"></i>
-              </a>
-            </div>
-          </div>
-
-          <div class="home__scroll">
-            <a href="#about" class="home__scroll-button button--flex">
-              <i class="uil uil-mouse-alt home__scroll-mouse"></i>
-              <span class="home__scroll-name">Scroll down</span>
-              <i class="uil uil-arrow-down home__scroll-arrow"></i>
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <!--======================= About========================-->
-
-      <section class="about section" id="about">
-        <h2 class="section__title">About Me</h2>
-        <span class="section__subtitle">My introduction</span>
-
-        <div class="about__container container grid">
-          <img src="assets/img/p.jpg" alt="" class="about__img" />
-
-          <div class="about__data">
-            <p class="about__description">
-              I'm a third-year IT undergraduate, passionate about technology and an avid reader. I have a self-motivated and can-do attitude, thriving in challenging and dynamic environments. Seeking a competitive position to enhance my skills and contribute to a professional organization. I'm very much passionate to learn new stuff that interests me and can help me to get better.
-            </p>
-
-            <div class="about__info">
-              <div>
-                <span class="about__info-title">03.02+</span>
-                <span class="about__info-name">Aggregate <br />CGPA</span>
-              </div>
-
-              <div>
-                <span class="about__info-title">04+</span>
-                <span class="about__info-name"
-                  >
-                  Projects</span
-                >
-              </div>
-
-              <div>
-                <span class="about__info-title">01+</span>
-                <span class="about__info-name">Months <br />experience</span>
-              </div>
-            </div>
-
-            <div class="about__buttons">
-              <a download="" href="assets\MyCV.pdf" class="button button--flex">
-                Download CV<i class="fas fa-download button__icon"></i>
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!--===================== SKILLS =====================-->
-
-      <section class="skills section" id="skills">
-        <h2 class="section__title">Skills</h2>
-        <span class="section__subtitle">My technical level</span>
-
-        <div class="skills__container container grid">
-          <div>
-            <!--==================== Skill 1 =================-->
-            <div class="skills__content skills__open">
-              <div class="skills__header">
-                <i class="fas fa-pencil-ruler skills__icon"></i>
-
-                <div>
-                  <h1 class="skills__title">Programming Languages</h1>
+        <section id="about">
+            <h2 class="section-title hidden">About Me</h2>
+            <div class="about-container">
+                <div class="about-image hidden">
+                    <img src="hanzla.jpg" alt="Muhammad Hanzla Profile" />
                 </div>
-
-                <i class="uil uil-angle-down skills__arrow"></i>
-              </div>
-              
-
-              <div class="skills__list grid">
-                <div class="skills__data">
-                  <div class="skills__titles">
-                    <h3 class="skills__name">C</h3>
-                  </div>
-                  
+                <div class="card about-content hidden">
+                    <p>Cybersecurity trainee with CEH training (ongoing at Corvit) and practical lab experience in scanning, enumeration, and vulnerability assessment. Skilled with Nmap, Wireshark, Nessus, and Shodan for analyzing networks and identifying security gaps. Strong foundation in networking, configuration, and reporting. Eager to apply skills in real-world environments and grow into a professional security engineer.</p>
                 </div>
-                  <div class="skills__data">
-                    <div class="skills__titles">
-                      <h3 class="skills__name">JavaScript</h3>
+            </div>
+        </section>
+        
+        <section id="services">
+            <h2 class="section-title hidden">What I Do</h2>
+            <div class="card-container">
+                <div class="card hidden">
+                    <div class="service-item">
+                        <i class="fas fa-search-plus icon"></i>
+                        <div>
+                            <h3>Scanning & Enumeration</h3>
+                            <p>Using tools like Nmap, Nessus, and Shodan to perform deep scans, enumerate services, and identify vulnerabilities in lab environments.</p>
+                        </div>
                     </div>
-                    
-                  </div>
-                  <div class="skills__data">
-                    <div class="skills__titles">
-                      <h3 class="skills__name">Python</h3>
+                </div>
+                <div class="card hidden">
+                    <div class="service-item">
+                        <i class="fas fa-network-wired icon"></i>
+                        <div>
+                            <h3>Network Configuration</h3>
+                            <p>Designing and configuring small networks with routers and switches. Applying IP addressing, subnetting, and testing firewall rules.</p>
+                        </div>
                     </div>
-                   
-                  </div>
-                  
-                
-                
-              </div>
-            </div>
-
-            <!--==================== Skill 2 =================-->
-            <div class="skills__content skills__close">
-              <div class="skills__header">
-                <i class="fas fa-code skills__icon"></i>
-
-                <div>
-                  <h1 class="skills__title">IT Constructs</h1>
                 </div>
-
-                <i class="uil uil-angle-down skills__arrow"></i>
-              </div>
-
-              <div class="skills__list grid">
-                <div class="skills__data">
-                  <div class="skills__titles">
-                    <h3 class="skills__name">DBMS</h3>
-                  </div>
-                  
-                </div>
-                <div class="skills__data">
-                  <div class="skills__titles">
-                    <h3 class="skills__name">DS & Algorithms</h3>
-                  </div>
-                  
-                </div>
-                <div class="skills__data">
-                  <div class="skills__titles">
-                    <h3 class="skills__name">OOP</h3>
-                  </div>
-                  
-                </div>
-                <div class="skills__data">
-                  <div class="skills__titles">
-                    <h3 class="skills__name">OS</h3>
-                  </div>
-                  
-                </div>
-                
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <!--==================== Skill 3 =================-->
-            <div class="skills__content skills__close">
-              <div class="skills__header">
-                <i class="fas fa-swatchbook skills__icon"></i>
-                <div>
-                  <h1 class="skills__title">Technologies</h1>
-                </div>
-
-                <i class="uil uil-angle-down skills__arrow"></i>
-              </div>
-
-              <div class="skills__list grid">
-                <div class="skills__data">
-                  <div class="skills__titles">
-                    <h3 class="skills__name">Git</h3>
-                  </div>
-                  
-                </div>
-                
-                <div class="skills__data">
-                  <div class="skills__titles">
-                    <h3 class="skills__name">Github</h3>
-                  </div>
-                  
-                </div>
-                
-                <div class="skills__data">
-                  <div class="skills__titles">
-                    <h3 class="skills__name">Tailwind</h3>
-                  </div>
-                  
-                </div>
-                <div class="skills__data">
-                  <div class="skills__titles">
-                    <h3 class="skills__name">Bootstrap</h3>
-                  </div>
-                  
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!--==================== Qualifications ==================-->
-
-      <section
-        class="qualification__section service__section"
-        id="qualification"
-      >
-        <h2 class="section__title">Qualification</h2>
-        <span class="section__subtitle">My personal journey</span>
-
-        <div
-          class="qualification__container container grid services__container"
-        >
-          <div class="qualification__tabs">
-            <div
-              class="qualification__button button--flex qualification__active"
-              data-target="#education"
-            >
-              <i class="uil uil-graduation-cap qualification__icon"></i>
-              Education
-            </div>
-          </div>
-
-          <div class="qualification__sections">
-            <!--====== Qualification Content 1 ======-->
-            <div
-              class="qualification__content qualifiation__active services__content"
-              data-content
-              id="education"
-            >
-              <!--====== Qualification 1 ======-->
-              <div class="qualification__data">
-                <div>
-                  <h3 class="qualification__title">MATRIC</h3>
-                  <span class="qualification__subtitle"
-                    >From PR Boys High School Engine Shed Lahore. </span
-                  >
-                  <div class="qualification__calender">
-                    <i class="uil uil-calendar-alt"></i>
-                    - 2019
-                  </div>
-                  <span
-                    class="button button--flex button--small button--link services__button"
-                  >
-                    View More
-                    <i class="uil uil-arrow-right button__icon"></i>
-                  </span>
-                  <div class="services__modal">
-                    <div class="services__modal-content">
-                      <h4 class="services__modal-title">
-                        Class 10th Summary :
-                      </h4>
-                      <i class="uil uil-times services__modal-close"></i>
-                      <ul class="services__modal-services grid">
-                        <li class="services__modal-service">
-                          <i
-                            class="uil uil-check-circle services__moda-icon"
-                          ></i>
-                          <p>
-                            Subjects studied: Science, Maths, English,
-                           Social Studies.
-                          </p>
-                        </li>
-                        <li class="services__modal-service">
-                          <i
-                            class="uil uil-check-circle services__moda-icon"
-                          ></i>
-                          <p>Scored 91%</p>
-                        </li>
-                        <li class="services__modal-service">
-                          <i
-                            class="uil uil-check-circle services__moda-icon"
-                          ></i>
-                          <p>Came runners up in inter-school Ball Badminton</p>
-                        </li>
-                      </ul>
+                <div class="card hidden">
+                    <div class="service-item">
+                        <i class="fas fa-traffic-light icon"></i>
+                        <div>
+                            <h3>Traffic Analysis</h3>
+                            <p>Leveraging Wireshark and tcpdump basics to capture and analyze network packets, detect anomalies, and troubleshoot connectivity issues.</p>
+                        </div>
                     </div>
-                  </div>
                 </div>
-
-                <div>
-                  <span class="qualification__rounder"></span>
-                  <span class="qualification__line"></span>
+            </div>
+        </section>
+        
+        <section id="toolkit">
+            <h2 class="section-title hidden">My Toolkit</h2>
+            <div class="card hidden">
+                <div class="toolkit-container">
+                    <span class="toolkit-tag">Nmap</span>
+                    <span class="toolkit-tag">Nessus</span>
+                    <span class="toolkit-tag">Shodan</span>
+                    <span class="toolkit-tag">Wireshark</span>
+                    <span class="toolkit-tag">tcpdump</span>
+                    <span class="toolkit-tag">Kali Linux</span>
+                    <span class="toolkit-tag">Windows</span>
+                    <span class="toolkit-tag">Git</span>
+                    <span class="toolkit-tag">IP Subnetting</span>
+                    <span class="toolkit-tag">Router/Switch Config</span>
+                    <span class="toolkit-tag">Firewall Basics</span>
                 </div>
-              </div>
+            </div>
+        </section>
 
-              <!--====== Qualification 2 ======-->
-              <div class="qualification__data">
-                <div></div>
-
-                <div>
-                  <span class="qualification__rounder"></span>
-                  <span class="qualification__line"></span>
-                </div>
-                <div>
-                  <h3 class="qualification__title">HIGHER EDUCATION</h3>
-                  <span class="qualification__subtitle"
-                    >University of the Punjab</span
-                  >
-                  <div class="qualification__calender">
-                    <i class="uil uil-calendar-alt"></i>
-                    - 2021 - 2025
-                  </div>
-                  <span
-                    class="button button--flex button--small button--link services__button"
-                  >
-                    View More
-                    <i class="uil uil-arrow-right button__icon"></i>
-                  </span>
-                  <div class="services__modal">
-                    <div class="services__modal-content">
-                      <h4 class="services__modal-title">
-                        Higher Education Summary :
-                      </h4>
-                      <i class="uil uil-times services__modal-close"></i>
-                      <ul class="services__modal-services grid">
-                        <li class="services__modal-service">
-                          <i
-                            class="uil uil-check-circle services__moda-icon"
-                          ></i>
-                          <p>
-                            Pursuing Bachelor's in Infomation Technology.
-                          </p>
-                        </li>
-                        <li class="services__modal-service">
-                          <i
-                            class="uil uil-check-circle services__moda-icon"
-                          ></i>
-                          <p>Scored 3.02 CGPA. </p>
-                        </li>
-                        <li class="services__modal-service">
-                          <i
-                            class="uil uil-check-circle services__moda-icon"
-                          ></i>
-                          <h4>FYP : </h4>
-                          <p>very soon...</p>
-                        </li>
-                      </ul>
+        <section id="projects">
+            <h2 class="section-title hidden">Projects (Lab Work)</h2>
+            <div class="card-container">
+                <div class="card project-card hidden">
+                    <div>
+                        <h3>Vulnerability Assessment Lab</h3>
+                        <p>Role: Security Analyst (Lab)</p>
+                        <p>Performed vulnerability scanning and enumeration using Nmap and Nessus in lab environments to identify security gaps and report on findings.</p>
                     </div>
-                  </div>
+                    <button class="modal-btn" data-modal="modal1">Learn More</button>
                 </div>
-              </div>
-
-              <!--====== Qualification 3 ======-->
-              <div class="qualification__data">
-                <div>
-                  <h3 class="qualification__title">COLLEGE</h3>
-                  <span class="qualification__subtitle"
-                    >From Govt's Islamia College Railway Road Lahore.</span
-                  >
-                  <div class="qualification__calender">
-                    <i class="uil uil-calendar-alt"></i>
-                    2019 - 2021
-                  </div>
-                  <span
-                    class="button button--flex button--small button--link services__button"
-                  >
-                    View More
-                    <i class="uil uil-arrow-right button__icon"></i>
-                  </span>
-                  <div class="services__modal">
-                    <div class="services__modal-content">
-                      <h4 class="services__modal-title">College Summary :</h4>
-                      <i class="uil uil-times services__modal-close"></i>
-                      <ul class="services__modal-services grid">
-                        <li class="services__modal-service">
-                          <i
-                            class="uil uil-check-circle services__modal-icon"
-                          ></i>
-                          <p>
-                            Completed ICS in Physics</p>
-                        </li>
-                        <li class="services__modal-service">
-                          <i
-                            class="uil uil-check-circle services__modal-icon"
-                          ></i>
-                          <p>Scored First Division.</p>
-                        </li>
-                        
-                      </ul>
+                <div class="card project-card hidden">
+                    <div>
+                        <h3>Network & Firewall Analysis Lab</h3>
+                        <p>Role: Network Engineer (Lab)</p>
+                        <p>Configured small networks, captured traffic with Wireshark to detect anomalies, and tested firewall rules to ensure proper segmentation.</p>
                     </div>
-                  </div>
+                    <button class="modal-btn" data-modal="modal2">Learn More</button>
                 </div>
-
-                <div>
-                  <span class="qualification__rounder"></span>
-                  <!--<span class="qualification__line"></span>-->
-                </div>
-              </div>
             </div>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      <!--=================== Portfolio ===================-->
-      <section class="portfolio section" id="portfolio">
-        <h2 class="section__title">Projects</h2>
-        <span class="section__subtitle">Most recent work</span>
-
-        <div class="portfolio__container container swiper-container">
-          <div class="swiper-wrapper">
-            <!-- ------------------------portfollio 1-------------------- -->
-            <div class="portfolio__content grid swiper-slide">
-              <img src="assets/img/portfolio-1.jpeg" class="portfolio__img" />
-
-              <div class="portfolio__data">
-                <h3 class="portfolio__title">
-                  Image Search App
-                </h3>
-                <p class="portfolio__description">
-                    The Image Search App is a sleek, user-friendly web application that allows users to effortlessly search for images using keywords. Built with HTML, CSS, and JavaScript, this project demonstrates the power of these core web technologies to deliver a responsive and intuitive user experience.
-                </p>
-                <a
-                  href="https://hanzla-s-786.github.io/Image_Search_App/"
-                  class="button button--flex button--small portfolio__button"
-                >
-                  GitHub Repository
-                  <i class="uil uil-external-link-alt button__icon"></i>
-                </a>
-                <a
-                  href="https://hanzla-s-786.github.io/Image_Search_App/"
-                  class="button button--flex button--small portfolio__button"
-                >
-                  See Live
-                  <i class="uil uil-external-link-alt button__icon"></i>
-                </a>
-              </div>
+        <section id="certs">
+            <h2 class="section-title hidden">Education & Certifications</h2>
+            <div class="card hidden">
+                <ul class="icon-list">
+                    <li>
+                        <span>
+                            <i class="fas fa-certificate icon"></i>
+                            <span>Certified Ethical Hacker (CEH) - EC-Council (Training ongoing at Corvit)</span>
+                        </span>
+                    </li>
+                    <li>
+                        <span>
+                            <i class="fas fa-university icon"></i>
+                            <span>Bachelor of Information Technology - University of Punjab (2021-2025)</span>
+                        </span>
+                    </li>
+                </ul>
             </div>
-            <!-- ------------------------portfollio 2-------------------- -->
+        </section>
 
-            <div class="portfolio__content grid swiper-slide">
-              <img src="assets/img/portfolio-2.jpeg" class="portfolio__img" />
-
-              <div class="portfolio__data">
-                <h3 class="portfolio__title">
-                  ATM Bank Machine
-                </h3>
-                <p class="portfolio__description">
-                    This is a Python code that simulates an Automated Teller Machine (ATM) system. The code provides a simple and intuitive interface for users to perform various banking transactions, including checking their account balance, withdrawing cash, depositing funds, and transferring money to other accounts.
-                </p>
-                <a
-                  href="https://hanzla-s-786.github.io/ATM_Machine_Code/"
-                  class="button button--flex button--small portfolio__button"
-                >
-                  GitHub Repository
-                  <i class="uil uil-external-link-alt button__icon"></i>
-                </a>
-                <a
-                  href="https://hanzla-s-786.github.io/ATM_Machine_Code/"
-                  class="button button--flex button--small portfolio__button"
-                >
-                  See Live
-                  <i class="uil uil-external-link-alt button__icon"></i>
-                </a>
-              </div>
+        <section id="contact">
+            <h2 class="section-title hidden">Contact Me</h2>
+            <div class="card hidden">
+                <ul class="icon-list">
+                    <li>
+                        <a href="mailto:hanzlas666@gmail.com">
+                            <i class="fas fa-envelope icon"></i>
+                            <span>hanzlas666@gmail.com</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="tel:+923241461287">
+                            <i class="fas fa-phone-alt icon"></i>
+                            <span>+92 324 1461287</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://linkedin.com/in/muhammad-hanzla-970219225" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-linkedin icon"></i>
+                            <span>linkedin.com/in/muhammad-hanzla-970219225</span>
+                        </a>
+                    </li>
+                </ul>
             </div>
-
-            <!-- ------------------------portfollio 3-------------------- -->
-            <div class="portfolio__content grid swiper-slide">
-              <img src="assets/img/portfolio-3.jpeg" class="portfolio__img" />
-
-              <div class="portfolio__data">
-                <h3 class="portfolio__title">Animated Signup/Login Page</h3>
-                <p class="portfolio__description">
-                    Effortlessly sign up or log in with our animated form. New users smoothly enter their name, email, and password to create an account. Existing users quickly access their profile with their email and password. Enjoy dynamic animations and interactive prompts for a seamless experience. Need help? Click "Forgot Password" for easy recovery.Contributions are welcome!
-                </p>
-                <a
-                  href="https://hanzla-s-786.github.io/SignUp_Form/"
-                  class="button button--flex button--small portfolio__button"
-                >
-                  GitHub Repository
-                  <i class="uil uil-external-link-alt button__icon"></i>
-                </a>
-                <a
-                  href="https://hanzla-s-786.github.io/SignUp_Form/"
-                  class="button button--flex button--small portfolio__button"
-                >
-                  See Live
-                  <i class="uil uil-external-link-alt button__icon"></i>
-                </a>
-              </div>
-            </div>
-
-          <!-- add arrows -->
-          <div class="swiper-button-next">
-            <i class="uil uil-angle-right-b swiper-portfolio-icon"></i>
-          </div>
-          <div class="swiper-button-prev">
-            <i class="uil uil-angle-left-b swiper-portfolio-icon"></i>
-          </div>
-          <!-- add pagination -->
-          <div class="swiper-pagination"></div>
-        </div>
-      </section>
-
-      <!--===================== Contact Me =====================-->
-      <section class="contact section" id="contact">
-        <h2 class="section__title">Contact Me</h2>
-        <span class="section__subtitle">Get in touch</span>
-
-        <div class="contact__container container grid">
-          <div>
-            <div class="contact__information">
-              <i class="uil uil-calling contact__icon"></i>
-
-              <div>
-                <h3 class="contact__title">Contact Me</h3>
-                <span class="contact__subtitle"
-                  ><a href="tel:6362243314"></a>+92 324 146 1287</span
-                >
-              </div>
-            </div>
-
-            <div class="contact__information">
-              <i class="uil uil-envelope-minus contact__icon"></i>
-
-              <div>
-                <h3 class="contact__title">Email</h3>
-                <span class="contact__subtitle"
-                  >hanzlas666@gmail.com</span
-                >
-              </div>
-            </div>
-
-            <div class="contact__information">
-              <i class="uil uil-map-marker contact__icon"></i>
-
-              <div>
-                <h3 class="contact__title">Location</h3>
-                <span class="contact__subtitle"
-                  >Punjab, Lahore, Pakistan.</span
-                >
-              </div>
-            </div>
-          </div>
-
-          <form action="https://formspree.io/f/xnnawaok"
-          method="POST"
-          class="contact__form grid">
-            <div class="contact__inputs grid">
-              <div class="contact__content">
-                <label for="" class="content__label">Name</label>
-                <input type="text" name="Name" class="contact__input" required  />
-              </div>
-
-              <div class="contact__content">
-                <label for="" class="content__label">Email</label>
-                <input type="email"  name="email" class="contact__input" autocomplete="off" required />
-              </div>
-            </div>
-
-            <div class="contact__content">
-              <label for="" class="content__label">Message</label>
-              <textarea
-                name="message"
-                id=""
-                cols="0"
-                rows="7"
-                class="contact__input"
-              ></textarea>
-            </div>
-
-            <div>
-              <button class="button button--flex" type="submit">
-                Send Message
-                <i class="uil uil-message button__icon"></i>
-              </button>
-            </div>
-          </form>
-        </div>
-      </section>
+        </section>
     </main>
-
-    <!--================== Footer ===============-->
-    <footer class="footer">
-      <div class="footer__bg">
-        <div class="footer__container container grid">
-          <div>
-            <h1 class="footer__title">Hanzla</h1>
-            <span class="footer__subtitle"
-              >Information Technology Student</span
-            >
-          </div>
-
-          <ul class="footer__links">
-            <li>
-              <a href="#qualification" class="footer__link">Qualification</a>
-            </li>
-            <li>
-              <a href="#portfolio" class="footer__link">Portfolio</a>
-            </li>
-            <li>
-              <a href="#contact" class="footer__link">Contact-Me</a>
-            </li>
-          </ul>
-
-          <div class="footer__socials">
-            <a
-              href="https://www.facebook.com/hanzla666/"
-              class="footer__social"
-              target="__blank"
-            >
-            <i class="fa-brands fa-facebook"></i>
-            </a>
-            <a
-              href="https://www.instagram.com/hanzla_s_786/"
-              class="footer__social"
-              target="__blank"
-            >
-            <i class="fa-brands fa-instagram"></i>
-            </a>
-            <a
-            href="https://github.com/hanzla-s-786"
-            class="footer__social"
-            target="__blank"
-          >
-          <i class="fa-brands fa-github"></i>
-          </a>
-
-            <a
-              href="https://www.linkedin.com/in/hanzla-970219225"
-              target="__blank"
-              class="footer__social"
-            >
-            <i class="fa-brands fa-linkedin"></i>
-            </a>
-          </div>
+    
+    <a href="#hero" id="back-to-top" title="Back to Top">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+    
+    <div class="modal-overlay" id="modal1">
+        <div class="modal-content">
+            <button class="close-btn" aria-label="Close modal">&times;</button>
+            <h3>Vulnerability Assessment Lab</h3>
+            <p><strong>Role:</strong> Security Analyst (Lab)</p>
+            <p>This lab focused on the practical application of vulnerability identification and reporting tools.</p>
+            <p><strong>Key Activities:</strong></p>
+            <ul>
+                <li>Performed vulnerability scanning and enumeration using Nmap and Nessus in lab environments.</li>
+                <li>Used Nmap for active port scanning and service detection to map the network.</li>
+                <li>Practiced OSINT with Shodan to identify exposed devices and services.</li>
+                <li>Prepared findings reports with identified issues and suggested remediation.</li>
+            </ul>
         </div>
+    </div>
+    
+    <div class="modal-overlay" id="modal2">
+        <div class="modal-content">
+            <button class="close-btn" aria-label="Close modal">&times;</button>
+            <h3>Network & Firewall Analysis Lab</h3>
+            <p><strong>Role:</strong> Network Engineer (Lab)</p>
+            <p>This lab involved configuring and securing small networks from the ground up, focusing on traffic flow and access control.</p>
+            <p><strong>Key Activities:</strong></p>
+            <ul>
+                <li>Configured small networks with routers and switches.</li>
+                <li>Applied subnetting and IP allocation for lab simulations.</li>
+                <li>Captured and analyzed traffic using Wireshark to detect anomalies.</li>
+                <li>Tested firewall rules and access control configurations.</li>
+            </ul>
+        </div>
+    </div>
 
-        <p class="footer__copy">&#169; 2024. All Right Reserved <br> DEVELOP BY : HANZLA 
-        </p>
-      </div>
+    <footer>
+        <p>&copy; 2025 Muhammad Hanzla - Cybersecurity Portfolio</p>
     </footer>
 
-    <!--================== SCROLL TOP ==================-->
-    <a href="#" class="scrollup" id="scroll-up">
-      <i class="uil uil-arrow-up scrollup__icon"></i>
-    </a>
-    <audio src="./assets/sound.mp3" style="display:none;" autoplay></audio>
-    <script defer src="https://app.fastbots.ai/embed.js" data-bot-id="cm34j364a09arsvbm5zdz9jl7"></script>
-    <script type="text/javascript" src="assets/swiper-bundle.min.js"></script>
-    <script src="https://kit.fontawesome.com/2205d59d52.js" crossorigin="anonymous"></script>
-    <script src="assets/ptj.js"></script>
-  </body>
+    <script>
+        /* --- Pre-loader --- */
+        const preloader = document.getElementById('preloader');
+        const loaderText = document.getElementById('loader-text');
+        const loaderMessages = [
+            "Loading modules...",
+            "Initializing kernel...",
+            "Accessing mainframe...",
+            "Security protocols active...",
+            "Welcome, Muhammad Hanzla."
+        ];
+        let msgIndex = 0;
+        
+        const loaderInterval = setInterval(() => {
+            msgIndex++;
+            if (msgIndex < loaderMessages.length) {
+                loaderText.textContent = loaderMessages[msgIndex];
+            } else {
+                clearInterval(loaderInterval);
+            }
+        }, 800);
+        
+        window.addEventListener('load', () => {
+            clearInterval(loaderInterval);
+            loaderText.textContent = "Welcome, Muhammad Hanzla.";
+            setTimeout(() => {
+                preloader.classList.add('loaded');
+                setTimeout(() => preloader.remove(), 500);
+            }, 500);
+        });
+        
+        /* --- Spotlight Effect --- */
+        document.addEventListener('mousemove', (e) => {
+            document.documentElement.style.setProperty('--x', e.clientX + 'px');
+            document.documentElement.style.setProperty('--y', e.clientY + 'px');
+        });
+
+        /* --- Hamburger Menu Toggle --- */
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('nav-links');
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        });
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                hamburger.classList.remove('active');
+            });
+        });
+
+        /* --- Typing Text Effect --- */
+        const typingElement = document.getElementById('typing-text');
+        const typingTexts = [
+            "Cybersecurity Trainee",
+            "Ethical Hacker (in training)",
+            "Vulnerability Assessor",
+            "Network Engineer"
+        ];
+        let typeCount = 0, typeIndex = 0, currentTypingText = '', typeLetter = '', isDeleting = false;
+        const typeSpeed = 80, eraseSpeed = 40, delayBetween = 1500;
+
+        function typeLoop() {
+            if (typeCount === typingTexts.length) typeCount = 0;
+            currentTypingText = typingTexts[typeCount];
+            if (!isDeleting) {
+                typeLetter = currentTypingText.slice(0, ++typeIndex);
+            } else {
+                typeLetter = currentTypingText.slice(0, --typeIndex);
+            }
+            typingElement.textContent = typeLetter;
+            if (!isDeleting && typeLetter.length === currentTypingText.length) {
+                isDeleting = true;
+                setTimeout(typeLoop, delayBetween);
+            } else if (isDeleting && typeLetter.length === 0) {
+                isDeleting = false;
+                typeCount++;
+                setTimeout(typeLoop, 300);
+            } else {
+                setTimeout(typeLoop, isDeleting ? eraseSpeed : typeSpeed);
+            }
+        }
+        window.addEventListener('load', typeLoop);
+
+        /* --- Binary Background Generator (Responsive) --- */
+        const bg = document.getElementById('binary-bg');
+        const particleCount = window.innerWidth < 768 ? 50 : 100;
+        for (let i = 0; i < particleCount; i++) {
+            const span = document.createElement('span');
+            span.textContent = Math.round(Math.random());
+            span.style.left = `${Math.random() * 100}vw`;
+            span.style.animationDuration = `${2 + Math.random() * 3}s`;
+            span.style.fontSize = `${12 + Math.random() * 8}px`;
+            bg.appendChild(span);
+        }
+        
+        /* --- Scroll Animations (Intersection Observer) --- */
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                }
+            });
+        }, {
+            threshold: 0.1 
+        });
+        
+        const hiddenElements = document.querySelectorAll('.hidden');
+        hiddenElements.forEach((el) => observer.observe(el));
+        
+        /* --- Modal Logic --- */
+        const modalBtns = document.querySelectorAll('.modal-btn');
+        const modals = document.querySelectorAll('.modal-overlay');
+        const closeBtns = document.querySelectorAll('.close-btn');
+
+        modalBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const modalId = btn.getAttribute('data-modal');
+                document.getElementById(modalId).classList.add('active');
+            });
+        });
+        
+        const closeModal = (modal) => {
+            modal.classList.remove('active');
+
+        };
+
+        closeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                closeModal(btn.closest('.modal-overlay'));
+            });
+        });
+        
+        modals.forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal(modal);
+                }
+            });
+        });
+        
+        /* --- Back to Top Button --- */
+        const backToTopBtn = document.getElementById('back-to-top');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        });
+        
+    </script>
+</body>
 </html>
